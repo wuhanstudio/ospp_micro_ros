@@ -1,0 +1,6 @@
+[book]
+authors = ["wuhanstudio"]
+language = "en"
+multilingual = false
+src = "src"
+title = "MicroROS on RT-Thread"
