@@ -1,92 +1,108 @@
-# Week 1
+# week 2
 
-## 前提
+> 2022/07/04 - 2022/07/10
 
-虚拟机上安装Ubuntu20.4，ROS2安装foxy
+## 上周问题
 
-## 工作内容
+* 单片机和ROS2 无法连接
 
-1. microROS在linux上使用；
-2. microROS在rtthread上使用；
+**上周会议给出的原因和建议：**
 
-### microROS在linux上使用
+* 原因
+  * 使用虚拟机，导致数据多次转发，可能存在数据延迟问题；
+  * docker版本过旧；
+* 建议：
+  * 使用WSL或者双系统；
+  * 安装新版本的docker；
+  * 使用串口作为测试；
 
-### 目的
+## 本周工作
 
-1. 初步尝试microROS；
+1. 在window上基于RT-Thread Studio和art-pi构建micro ros (串口)工程；
+2. 在Ubuntu上构建`micro-ros-agent` ( docker & Vulcanexus)
 
-1. 查看microROS的源码的组成部分；
+###  docker
 
-### 结果
+版本：20.10.17
 
-按照[First micro-ROS Application on Linux](https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Fmicro.ros.org%2Fdocs%2Ftutorials%2Fcore%2Ffirst_application_linux%2F&data=05|01|hw630%40exeter.ac.uk|ed85ac1384874bc22a5208da577fc661|912a5d77fb984eeeaf321334d8f04a53|0|0|637918503559592081|Unknown|TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D|3000|||&sdata=g3W5ZeTgvvpbWF9Ap6%2BcIhbwq%2BLdUOldDnTp7ZU8U20%3D&reserved=0)构建microROS和micro-ROS agent。由于运行`ros2 run micro_ros_setup build_firmware.sh`和`ros2 run micro_ros_setup build_agent.sh`报错：
-
+```bash
+# 运行micro-ros-agent：本地
+docker run -it --net=host microros/micro-ros-agent:galactic udp4 -p 8888
+# 运行micro-ros-demos
+sudo docker run -it --net=host microros/micro-ros-demos bash
+source install/local_setup.bash
+ros2 run micro_ros_demos_rclc int32_publisher
+# 查看话题
+ros2 topic list
+ros2 topic echo /std_msgs_msg_Int32
 ```
-Compiling for host environment: not cleaning path
-Building firmware for host platform generic
-usage: colcon [-h] [--log-base LOG_BASE] [--log-level LOG_LEVEL]
-              {build,test,test-result} ...
-colcon: error: unrecognized arguments: --packages-up-to rosidl_typesupport_microxrcedds_c --metas src
+
+可以看到话题，说明micro-ros-agent没有问题
+
+```bash
+# 运行micro-ros-agent
+docker run -it -v /dev:/dev --privileged microros/micro-ros-agent:galactic serial --dev /dev/ttyUSB0
+# docker run -it -p 9999:9999/udp --privileged microros/micro-ros-agent:galactic udp4 -p 9999
+
+# 单片机
+microros_pub_int32
 ```
 
-所以直接使用`colcon build`
 
-服务端：
 
+结果：
+
+```bash
+# ubuntu
+[1657365773.777815] info     | TermiosAgentLinux.cpp | init                     | running...             | fd: 3
+[1657365773.778163] info     | Root.cpp           | set_verbose_level        | logger setup           | verbose_level: 4
+[1657365857.374839] info     | Root.cpp           | create_client            | create                 | client_key: 0x10176887, session_id: 0x81
+[1657365857.375037] info     | SessionManager.hpp | establish_session        | session established    | client_key: 0x10176887, address: 0
+[1657365858.394287] info     | ProxyClient.cpp    | create_participant       | participant created    | client_key: 0x10176887, participant_id: 0x000(1)
+
+# 单片机
+[micro_ros] node created                                                        
+[micro_ros] publisher created                                                   
+[micro_ros] timer created                                                       
+[micro_ros] executor created                                                    
+[micro_ros] New thread mr_pubint32 
 ```
+
+
+
+micro_ros 软件包配置
+
+![image-20220709091040708](picture/week_0704_0710/image-20220709091040708.png)
+
+### Vulcanexus
+
+[Vulcanexus](https://docs.vulcanexus.org/en/galactic/rst/installation/linux_binary_installation.html)
+
+```bash
+# agent 测试
 ros2 run micro_ros_agent micro_ros_agent udp4 -p 8888
+# demos 测试
+sudo docker run -it --net=host microros/micro-ros-demos bash
+source install/local_setup.bash
+ros2 run micro_ros_demos_rclc int32_publisher
 ```
 
-客户端：
+可以看到话题，说明基于Vulcanexus安装的micro-ros-agent没有问题
 
-```
-ros2 run micro_ros_demos_rclc ping_pong 
-```
-
-客户端报错：
-
-```
-[ERROR] [1656251587.172644707] [rclc]: [rclc_publisher_init_best_effort] Error in rcl_publisher_init: Undefined type support, at /home/haijun/Desktop/test/src/uros/rmw_microxrcedds/rmw_microxrcedds_c/src/rmw_publisher.c:127, at /tmp/binarydeb/ros-foxy-rcl-1.1.13/src/rcl/publisher.c:180
+```bash
+# 运行micro-ros-agent
+ros2 run micro_ros_agent micro_ros_agent serial -D /dev/ttyUSB0
+# 单片机
+microros_pub_int32
 ```
 
-从error来看，应该是`rclc_publisher_init_best_effort`函数出错。
+结果和 docker一致。
 
-具体原因未知
+## 结果 & 问题
 
-### microROS在rtthread上使用
+结果：单片机和ROS2 无法连接的问题没有解决。从结果上来看，还是create_topic没有成功。
 
-### 目的
-
-1. 尝试rtt能否接入ROS2
-
-### 结果
-
-rtt客户端：
-
-连接方式：udp
-
-运行时，从rtt终端终端提示来说，线程能正常运行。
+目前micro ros agent运行在双系统的Ubuntu上，应该不存在数据多次转化。目前猜想是不是单片机端配置有问题。
 
 
 
-ros agent 服务端：
-
-```
-ros2 run micro_ros_agent micro_ros_agent udp4 -p 8888
-[1656252343.224844] info     | UDPv4AgentLinux.cpp | init                     | running...             | port: 8888
-[1656252343.225293] info     | Root.cpp           | set_verbose_level        | logger setup           | verbose_level: 4
-[1656252350.362219] info     | Root.cpp           | create_client            | create                 | client_key: 0x7097FB67, session_id: 0x81
-[1656252350.362475] info     | SessionManager.hpp | establish_session        | session established    | client_key: 0x7097FB67, address: 192.168.31.73:704
-[1656252350.400982] info     | ProxyClient.cpp    | create_participant       | participant created    | client_key: 0x7097FB67, participant_id: 0x000(1)
-```
-
-重新查看rtt端的代码，发现`rclc_publisher_init_default()`的返回值不为零，可以定位创建publish失败。原因未知。
-
-## 总结
-
-在linux端的rtt端运行microROS均失败，定位到的错误均由于`publisher_init`初始化失败导致。目前不知道原因为何，猜测是不是`micro-ROS agent`构建有问题。
-
-## 下一步计划
-
-1. rtt端测试下uart通信，看是否出现同一样问题；
-2. 使用docker 尝试下。
