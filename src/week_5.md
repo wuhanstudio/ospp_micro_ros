@@ -1,4 +1,21 @@
-# micro-ROS[RT-Thread]：自定义编译静态库
+# week5
+
+> 2022/08/01 - 2022/08/05
+
+## 任务：
+
+* 为art -pi 编译静态库，使micro ros能在art -pi上成功运行
+
+## 完成情况：
+
+1. 完成静态库的编译，micro ros能在art -pi上运行（串口）
+
+## 遇到的问题：
+
+1. clock_gettime()
+2. 无法使用udp运行，问题在于该函数`rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100));`**具体原因未知**、**修改方法未知**（`micro_ros_pub_int32_udp.c`能运行是因为程序里面没有使用`rclc_executor_spin_some`()）
+
+
 
 * ROS2版本：galactic
 * 单片机：art-pi
