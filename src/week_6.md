@@ -74,7 +74,7 @@ ros2 run micro_ros_setup create_firmware_ws.sh generate_lib
 ros2 run micro_ros_setup build_firmware.sh $(pwd)/my_custom_toolchain.cmake $(pwd)/my_custom_colcon.meta
 ```
 
-调佣脚本：
+调用脚本：
 
 1. `build_firmware.sh`
    1. 检查`micro_ros_setup`环境
