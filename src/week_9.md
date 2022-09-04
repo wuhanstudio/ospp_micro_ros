@@ -10,6 +10,22 @@
 
 * 初步完成：通过`micro_ros_setup`完成代码下载、编译（microROS & rtthread）
 
+代码：
+
+micro_ros_setup ，新增config/rtthread
+
+```bash
+git clone -b rtthread https://github.com/navy-to-haijun/micro_ros_setup.git
+```
+
+micro_ros_rtthread： 提供demos&transport
+
+```bash
+git clone https://github.com/navy-to-haijun/micro_ros_rtthread.git
+```
+
+
+
 ## 周会拟讨论问题
 
 * 当前构建方式(先用clocon编译microROS为静态文件，在使用scons链接静态文件和rtthread一起编译出可执行文件)是否合理；
@@ -42,10 +58,6 @@ tree
 2. 自己提供一个文件夹用于存放demos&transport文件
 
 文件名：micro_ros_rtthread（暂时放到自己的仓库下）
-
-```bash
-https://github.com/navy-to-haijun/micro_ros_rtthread.git
-```
 
 ```bash
 .
@@ -219,7 +231,7 @@ cp $PREFIX/config/$RTOS/$TARGET_FOLDER/client-colcon.meta mcu_ws/colcon.meta || 
 
 micro_ros_rtthread/build/include/rmw/types.h 在编译时会报错误, 错误定位：
 
-```
+```c
 #ifndef _WIN32
 # define RMW_DECLARE_DEPRECATED(name, msg) name __attribute__((deprecated(msg)))
 #else
