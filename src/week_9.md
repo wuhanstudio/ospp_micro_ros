@@ -207,25 +207,7 @@ popd >/dev/null
 
 ### 5. 下载
 
-由于art-pi下载需要调用外部算法，不知道如何写成命令，所有这一步的脚本为写
-
-
-
-```bash
-
-# dev_ws 下载和ament相关的代码
-ros2 run micro_ros_setup create_ws.sh $DEV_WS_DIR $PREFIX/config/$RTOS/dev_ros2_packages.txt
-# 依赖
-rosdep install -y --from-paths $DEV_WS_DIR -i $DEV_WS_DIR --rosdistro $ROS_DISTRO --skip-keys="$SKIP"
-# 创建 mcu_ws
-# 下载ros client相关的代码
-ros2 run micro_ros_setup create_ws.sh mcu_ws $PREFIX/config/client_ros2_packages.txt $PREFIX/config/$RTOS/$TARGET_FOLDER/client_uros_packages.repos
-
-# 复制配置文件到mcu_ws 下
-cp $PREFIX/config/$RTOS/$TARGET_FOLDER/client-colcon.meta mcu_ws/colcon.meta || :
-
-
-```
+由于art-pi下载需要调用外部算法，不知道如何写成命令，所有这一步的脚本没有写
 
 ## 问题
 
