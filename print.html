@@ -1,0 +1,1891 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>MicroROS on RT-Thread</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="week_0.html"><strong aria-hidden="true">2.</strong> Week 0</a></li><li class="chapter-item expanded "><a href="week_1.html"><strong aria-hidden="true">3.</strong> Week 1</a></li><li class="chapter-item expanded "><a href="week_2.html"><strong aria-hidden="true">4.</strong> Week 2</a></li><li class="chapter-item expanded "><a href="week_3.html"><strong aria-hidden="true">5.</strong> Week 3</a></li><li class="chapter-item expanded "><a href="week_4.html"><strong aria-hidden="true">6.</strong> Week 4</a></li><li class="chapter-item expanded "><a href="week_5.html"><strong aria-hidden="true">7.</strong> Week 5</a></li><li class="chapter-item expanded "><a href="week_6.html"><strong aria-hidden="true">8.</strong> Week 6</a></li><li class="chapter-item expanded "><a href="week_7.html"><strong aria-hidden="true">9.</strong> Week 7</a></li><li class="chapter-item expanded "><a href="week_8.html"><strong aria-hidden="true">10.</strong> Week 8</a></li><li class="chapter-item expanded "><a href="week_9.html"><strong aria-hidden="true">11.</strong> Week 9</a></li><li class="chapter-item expanded "><a href="week_10.html"><strong aria-hidden="true">12.</strong> Week 10</a></li><li class="chapter-item expanded "><a href="week_11.html"><strong aria-hidden="true">13.</strong> Week 11</a></li><li class="chapter-item expanded "><a href="week_12.html"><strong aria-hidden="true">14.</strong> Week 12</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">MicroROS on RT-Thread</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="microros-on-rt-thread"><a class="header" href="#microros-on-rt-thread">MicroROS on RT-Thread</a></h1>
+<p>OSPP 2022 - MicroROS on RT-Thread</p>
+<p><strong>Student</strong>: Haijun Du</p>
+<p><strong>Mentor</strong>: Han Wu</p>
+<p>Robot Operating System (ROS) is a set of a software frameworks for robotic application development that was initially released by Stanford University in 2007. Further improvements on ROS could introduce breaking changes, making ROS1 unstable. As a result, the second generation of ROS was released (ROS2). The target platform of ROS2 is Linux, while micro_ros devote to bringing ROS2 API to MCU.</p>
+<p>This project aims to use micro_ros on RT-Thread, which is a Real-time Operating System (RTOS). Some issues remain unsolved on the existing micro_ros software package(https://github.com/wuhanstudio/micro_ros): the UDP communication is unstable, more service examples are to be added, a precompiled static library is required for compilation of the micro_ros package, and not integrated into the micro_ros official build system to provide benchmark results.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week-0"><a class="header" href="#week-0">Week 0</a></h1>
+<blockquote>
+<p>2022/06/27 - 2022/07/03</p>
+</blockquote>
+<h2 id="前提"><a class="header" href="#前提">前提</a></h2>
+<p>虚拟机上安装Ubuntu20.4，ROS2安装foxy</p>
+<h2 id="工作内容"><a class="header" href="#工作内容">工作内容</a></h2>
+<ol>
+<li>microROS在linux上使用；</li>
+<li>microROS在rtthread上使用；</li>
+</ol>
+<h3 id="microros在linux上使用"><a class="header" href="#microros在linux上使用">microROS在linux上使用</a></h3>
+<h3 id="目的"><a class="header" href="#目的">目的</a></h3>
+<ol>
+<li>
+<p>初步尝试microROS；</p>
+</li>
+<li>
+<p>查看microROS的源码的组成部分；</p>
+</li>
+</ol>
+<h3 id="结果"><a class="header" href="#结果">结果</a></h3>
+<p>按照<a href="https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Fmicro.ros.org%2Fdocs%2Ftutorials%2Fcore%2Ffirst_application_linux%2F&amp;data=05%7C01%7Chw630%40exeter.ac.uk%7Ced85ac1384874bc22a5208da577fc661%7C912a5d77fb984eeeaf321334d8f04a53%7C0%7C0%7C637918503559592081%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=g3W5ZeTgvvpbWF9Ap6%2BcIhbwq%2BLdUOldDnTp7ZU8U20%3D&amp;reserved=0">First micro-ROS Application on Linux</a>构建microROS和micro-ROS agent。由于运行<code>ros2 run micro_ros_setup build_firmware.sh</code>和<code>ros2 run micro_ros_setup build_agent.sh</code>报错：</p>
+<pre><code>Compiling for host environment: not cleaning path
+Building firmware for host platform generic
+usage: colcon [-h] [--log-base LOG_BASE] [--log-level LOG_LEVEL]
+              {build,test,test-result} ...
+colcon: error: unrecognized arguments: --packages-up-to rosidl_typesupport_microxrcedds_c --metas src
+</code></pre>
+<p>所以直接使用<code>colcon build</code></p>
+<p>服务端：</p>
+<pre><code>ros2 run micro_ros_agent micro_ros_agent udp4 -p 8888
+</code></pre>
+<p>客户端：</p>
+<pre><code>ros2 run micro_ros_demos_rclc ping_pong 
+</code></pre>
+<p>客户端报错：</p>
+<pre><code>[ERROR] [1656251587.172644707] [rclc]: [rclc_publisher_init_best_effort] Error in rcl_publisher_init: Undefined type support, at /home/haijun/Desktop/test/src/uros/rmw_microxrcedds/rmw_microxrcedds_c/src/rmw_publisher.c:127, at /tmp/binarydeb/ros-foxy-rcl-1.1.13/src/rcl/publisher.c:180
+</code></pre>
+<p>从error来看，应该是<code>rclc_publisher_init_best_effort</code>函数出错。</p>
+<p>具体原因未知</p>
+<h3 id="microros在rtthread上使用"><a class="header" href="#microros在rtthread上使用">microROS在rtthread上使用</a></h3>
+<h3 id="目的-1"><a class="header" href="#目的-1">目的</a></h3>
+<ol>
+<li>尝试rtt能否接入ROS2</li>
+</ol>
+<h3 id="结果-1"><a class="header" href="#结果-1">结果</a></h3>
+<p>rtt客户端：</p>
+<p>连接方式：udp</p>
+<p>运行时，从rtt终端终端提示来说，线程能正常运行。</p>
+<p>ros agent 服务端：</p>
+<pre><code>ros2 run micro_ros_agent micro_ros_agent udp4 -p 8888
+[1656252343.224844] info     | UDPv4AgentLinux.cpp | init                     | running...             | port: 8888
+[1656252343.225293] info     | Root.cpp           | set_verbose_level        | logger setup           | verbose_level: 4
+[1656252350.362219] info     | Root.cpp           | create_client            | create                 | client_key: 0x7097FB67, session_id: 0x81
+[1656252350.362475] info     | SessionManager.hpp | establish_session        | session established    | client_key: 0x7097FB67, address: 192.168.31.73:704
+[1656252350.400982] info     | ProxyClient.cpp    | create_participant       | participant created    | client_key: 0x7097FB67, participant_id: 0x000(1)
+</code></pre>
+<p>重新查看rtt端的代码，发现<code>rclc_publisher_init_default()</code>的返回值不为零，可以定位创建publish失败。原因未知。</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>在linux端的rtt端运行microROS均失败，定位到的错误均由于<code>publisher_init</code>初始化失败导致。目前不知道原因为何，猜测是不是<code>micro-ROS agent</code>构建有问题。</p>
+<h2 id="下一步计划"><a class="header" href="#下一步计划">下一步计划</a></h2>
+<ol>
+<li>rtt端测试下uart通信，看是否出现同一样问题；</li>
+<li>使用docker 尝试下。</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week-1"><a class="header" href="#week-1">Week 1</a></h1>
+<blockquote>
+<p>2022/07/04 - 2022/07/10</p>
+</blockquote>
+<h2 id="上周问题"><a class="header" href="#上周问题">上周问题</a></h2>
+<ul>
+<li>单片机和ROS2 无法连接</li>
+</ul>
+<p><strong>上周会议给出的原因和建议：</strong></p>
+<ul>
+<li>原因
+<ul>
+<li>使用虚拟机，导致数据多次转发，可能存在数据延迟问题；</li>
+<li>docker版本过旧；</li>
+</ul>
+</li>
+<li>建议：
+<ul>
+<li>使用WSL或者双系统；</li>
+<li>安装新版本的docker；</li>
+<li>使用串口作为测试；</li>
+</ul>
+</li>
+</ul>
+<h2 id="本周工作"><a class="header" href="#本周工作">本周工作</a></h2>
+<ol>
+<li>在window上基于RT-Thread Studio和art-pi构建micro ros (串口)工程；</li>
+<li>在Ubuntu上构建<code>micro-ros-agent</code> ( docker &amp; Vulcanexus)</li>
+</ol>
+<h3 id="docker"><a class="header" href="#docker">docker</a></h3>
+<p>版本：20.10.17</p>
+<pre><code class="language-bash"># 运行micro-ros-agent：本地
+docker run -it --net=host microros/micro-ros-agent:galactic udp4 -p 8888
+# 运行micro-ros-demos
+sudo docker run -it --net=host microros/micro-ros-demos bash
+source install/local_setup.bash
+ros2 run micro_ros_demos_rclc int32_publisher
+# 查看话题
+ros2 topic list
+ros2 topic echo /std_msgs_msg_Int32
+</code></pre>
+<p>可以看到话题，说明micro-ros-agent没有问题</p>
+<pre><code class="language-bash"># 运行micro-ros-agent
+docker run -it -v /dev:/dev --privileged microros/micro-ros-agent:galactic serial --dev /dev/ttyUSB0
+# docker run -it -p 9999:9999/udp --privileged microros/micro-ros-agent:galactic udp4 -p 9999
+
+# 单片机
+microros_pub_int32
+</code></pre>
+<p>结果：</p>
+<pre><code class="language-bash"># ubuntu
+[1657365773.777815] info     | TermiosAgentLinux.cpp | init                     | running...             | fd: 3
+[1657365773.778163] info     | Root.cpp           | set_verbose_level        | logger setup           | verbose_level: 4
+[1657365857.374839] info     | Root.cpp           | create_client            | create                 | client_key: 0x10176887, session_id: 0x81
+[1657365857.375037] info     | SessionManager.hpp | establish_session        | session established    | client_key: 0x10176887, address: 0
+[1657365858.394287] info     | ProxyClient.cpp    | create_participant       | participant created    | client_key: 0x10176887, participant_id: 0x000(1)
+
+# 单片机
+[micro_ros] node created                                                        
+[micro_ros] publisher created                                                   
+[micro_ros] timer created                                                       
+[micro_ros] executor created                                                    
+[micro_ros] New thread mr_pubint32 
+</code></pre>
+<p>micro_ros 软件包配置</p>
+<p><img src="picture/week_0704_0710/image-20220709091040708.png" alt="image-20220709091040708" /></p>
+<h3 id="vulcanexus"><a class="header" href="#vulcanexus">Vulcanexus</a></h3>
+<p><a href="https://docs.vulcanexus.org/en/galactic/rst/installation/linux_binary_installation.html">Vulcanexus</a></p>
+<pre><code class="language-bash"># agent 测试
+ros2 run micro_ros_agent micro_ros_agent udp4 -p 8888
+# demos 测试
+sudo docker run -it --net=host microros/micro-ros-demos bash
+source install/local_setup.bash
+ros2 run micro_ros_demos_rclc int32_publisher
+</code></pre>
+<p>可以看到话题，说明基于Vulcanexus安装的micro-ros-agent没有问题</p>
+<pre><code class="language-bash"># 运行micro-ros-agent
+ros2 run micro_ros_agent micro_ros_agent serial -D /dev/ttyUSB0
+# 单片机
+microros_pub_int32
+</code></pre>
+<p>结果和 docker一致。</p>
+<h2 id="结果--问题"><a class="header" href="#结果--问题">结果 &amp; 问题</a></h2>
+<p>结果：单片机和ROS2 无法连接的问题没有解决。从结果上来看，还是create_topic没有成功。</p>
+<p>目前micro ros agent运行在双系统的Ubuntu上，应该不存在数据多次转化。目前猜想是不是单片机端配置有问题。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week-2"><a class="header" href="#week-2">Week 2</a></h1>
+<blockquote>
+<p>2022/07/11 - 2022/07/17</p>
+</blockquote>
+<h2 id="上周任务"><a class="header" href="#上周任务">上周任务</a></h2>
+<ul>
+<li>解决uart1问题（完成）；</li>
+<li>在单片机端使用<code> subscribe int32</code>（未完成）</li>
+<li>尝试Hardfloat / Softfloat（未完成）</li>
+</ul>
+<h3 id="uart1通信问题"><a class="header" href="#uart1通信问题">uart1通信问题</a></h3>
+<p>未对uart1底层驱动进行适配，硬件没有问题</p>
+<h2 id="周会需帮助解决问题"><a class="header" href="#周会需帮助解决问题">周会需帮助解决问题</a></h2>
+<ul>
+<li>micro ros 软件包编译报错</li>
+</ul>
+<p>arm-none-eabi-gcc 版本：</p>
+<pre><code class="language-bash">arm-none-eabi-gcc -v
+
+Using built-in specs.
+COLLECT_GCC=arm-none-eabi-gcc
+COLLECT_LTO_WRAPPER=/home/haijun/env_released_1.2.0/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/lto-wrapper
+Target: arm-none-eabi
+Configured with: /home/build/work/GCC-5-0-build/src/gcc/configure --target=arm-none-eabi --prefix=/home/build/work/GCC-5-0-build/install-native --libexecdir=/home/build/work/GCC-5-0-build/install-native/lib --infodir=/home/build/work/GCC-5-0-build/install-native/share/doc/gcc-arm-none-eabi/info --mandir=/home/build/work/GCC-5-0-build/install-native/share/doc/gcc-arm-none-eabi/man --htmldir=/home/build/work/GCC-5-0-build/install-native/share/doc/gcc-arm-none-eabi/html --pdfdir=/home/build/work/GCC-5-0-build/install-native/share/doc/gcc-arm-none-eabi/pdf --enable-languages=c,c++ --enable-plugins --disable-decimal-float --disable-libffi --disable-libgomp --disable-libmudflap --disable-libquadmath --disable-libssp --disable-libstdcxx-pch --disable-nls --disable-shared --disable-threads --disable-tls --with-gnu-as --with-gnu-ld --with-newlib --with-headers=yes --with-python-dir=share/gcc-arm-none-eabi --with-sysroot=/home/build/work/GCC-5-0-build/install-native/arm-none-eabi --build=i686-linux-gnu --host=i686-linux-gnu --with-gmp=/home/build/work/GCC-5-0-build/build-native/host-libs/usr --with-mpfr=/home/build/work/GCC-5-0-build/build-native/host-libs/usr --with-mpc=/home/build/work/GCC-5-0-build/build-native/host-libs/usr --with-isl=/home/build/work/GCC-5-0-build/build-native/host-libs/usr --with-cloog=/home/build/work/GCC-5-0-build/build-native/host-libs/usr --with-libelf=/home/build/work/GCC-5-0-build/build-native/host-libs/usr --with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm' --with-pkgversion='GNU Tools for ARM Embedded Processors' --with-multilib-list=armv6-m,armv7-m,armv7e-m,armv7-r,armv8-m.base,armv8-m.main
+Thread model: single
+gcc version 5.4.1 20160609 (release) [ARM/embedded-5-branch revision 237715] (GNU Tools for ARM Embedded Processors)
+</code></pre>
+<p>编译报错：</p>
+<pre><code class="language-bash">scons
+
+scons: Reading SConscript files ...
+Newlib version:unknown
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: building associated VariantDir targets: build
+CC build/packages/micro_ros-galactic/src/rtt_serial_transports.o
+packages/micro_ros-galactic/src/rtt_serial_transports.c:47:16: error: conflicting types for '__ctype_ptr__'
+ char __EXPORT *__ctype_ptr__ = (char *) _ctype_b + 127;
+                ^
+In file included from packages/micro_ros-galactic/src/rtt_serial_transports.c:5:0:
+/home/haijun/env_released_1.2.0/gcc-arm-none-eabi-5_4-2016q2/arm-none-eabi/include/ctype.h:46:23: note: previous declaration of '__ctype_ptr__' was here
+ extern __IMPORT char *__ctype_ptr__;
+                       ^
+In file included from packages/micro_ros-galactic/src/rtt_serial_transports.c:52:0:
+packages/micro_ros-galactic/src/micro_ros_rtt.h:20:44: warning: 'struct timespec' declared inside parameter list
+ int clock_gettime(clockid_t unused, struct timespec *tp);
+                                            ^
+packages/micro_ros-galactic/src/micro_ros_rtt.h:20:44: warning: its scope is only this definition or declaration, which is probably not what you want
+packages/micro_ros-galactic/src/rtt_serial_transports.c:71:5: error: conflicting types for 'clock_gettime'
+ int clock_gettime(clockid_t unused, struct timespec *tp)
+     ^
+In file included from packages/micro_ros-galactic/src/rtt_serial_transports.c:52:0:
+packages/micro_ros-galactic/src/micro_ros_rtt.h:20:5: note: previous declaration of 'clock_gettime' was here
+ int clock_gettime(clockid_t unused, struct timespec *tp);
+     ^
+scons: *** [build/packages/micro_ros-galactic/src/rtt_serial_transports.o] Error 1
+scons: building terminated because of errors.
+</code></pre>
+<p><strong>猜测原因：GCC版本问题</strong></p>
+<p>上次周会下载的arm-none-eabi-gcc 5.4.1因为网络问题，似乎没有下载全，我从该<a href="https://developer.arm.com/downloads/-/gnu-rm">链接</a>下载 ：</p>
+<p>选择： 5-2016-q2-update</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week-3"><a class="header" href="#week-3">Week 3</a></h1>
+<blockquote>
+<p>2022/07/18 - 2022/07/24</p>
+</blockquote>
+<p>Break</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week4"><a class="header" href="#week4">week4</a></h1>
+<blockquote>
+<p>2022/07/25 - 2022/07/31</p>
+</blockquote>
+<h2 id="1遗留的问题"><a class="header" href="#1遗留的问题">1.遗留的问题</a></h2>
+<p>单片机端和PC端的create_topic没有成功，估计是/ libc (POSIX) or clock_gettime的问题</p>
+<h2 id="2-任务"><a class="header" href="#2-任务">2. 任务</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"/>
+由于将rtthread的版本降低到4.0.1尝试运行micro -ros软件包；</li>
+<li><input disabled="" type="checkbox"/>
+编译基于cortex-m7的micro -ros的静态编译库，使micro -ros软件包能在art-pi上运行；</li>
+</ul>
+<h2 id="3-工作情况"><a class="header" href="#3-工作情况">3. 工作情况</a></h2>
+<h3 id="31-降低rtthread的版本"><a class="header" href="#31-降低rtthread的版本">3.1 降低rtthread的版本</a></h3>
+<p>rtthread4.0.1没有art-pi的bsp，考虑到以后会使用rtthread的最新版本，因此配置art-pi的意义不大，终止该任务；</p>
+<h3 id="32-静态编译micro--ros"><a class="header" href="#32-静态编译micro--ros">3.2 静态编译micro -ros</a></h3>
+<p>参考网址：</p>
+<p><a href="https://micro.ros.org/docs/tutorials/advanced/create_custom_static_library/">Creating custom static micro-ROS library</a></p>
+<p><a href="https://github.com/micro-ROS/docker">docker</a></p>
+<p>由于VPN的原因，导致download的仓库不全，无法进行正常的编译；</p>
+<h2 id="4-周会讨论问题"><a class="header" href="#4-周会讨论问题">4. 周会讨论问题</a></h2>
+<ul>
+<li>VPN</li>
+<li>如何生成静态库；</li>
+</ul>
+<h2 id="5-下周任务"><a class="header" href="#5-下周任务">5. 下周任务</a></h2>
+<ol>
+<li>解决Ubuntu端的vpn问题；</li>
+<li>继续完成为art-pi生成静态库的任务，期望下周能在art-pi运行micro -ros；</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week5"><a class="header" href="#week5">week5</a></h1>
+<blockquote>
+<p>2022/08/01 - 2022/08/05</p>
+</blockquote>
+<h2 id="任务"><a class="header" href="#任务">任务：</a></h2>
+<ul>
+<li>为art -pi 编译静态库，使micro ros能在art -pi上成功运行</li>
+</ul>
+<h2 id="完成情况"><a class="header" href="#完成情况">完成情况：</a></h2>
+<ol>
+<li>完成静态库的编译，micro ros能在art -pi上运行（串口）</li>
+</ol>
+<h2 id="遇到的问题"><a class="header" href="#遇到的问题">遇到的问题：</a></h2>
+<ol>
+<li>clock_gettime()</li>
+<li>无法使用udp运行，问题在于该函数<code>rclc_executor_spin_some(&amp;executor, RCL_MS_TO_NS(100));</code><strong>具体原因未知</strong>、<strong>修改方法未知</strong>（<code>micro_ros_pub_int32_udp.c</code>能运行是因为程序里面没有使用<code>rclc_executor_spin_some</code>()）</li>
+</ol>
+<ul>
+<li>ROS2版本：galactic</li>
+<li>单片机：art-pi</li>
+</ul>
+<h2 id="1-环境准备"><a class="header" href="#1-环境准备">1 环境准备</a></h2>
+<p>参考链接：</p>
+<ul>
+<li>https://micro.ros.org/docs/tutorials/advanced/create_custom_static_library/</li>
+<li>https://micro.ros.org/docs/tutorials/core/first_application_rtos/freertos/</li>
+</ul>
+<h3 id="1-1-准备micro_ros_setup"><a class="header" href="#1-1-准备micro_ros_setup">1. 1 准备<code>micro_ros_setup</code></a></h3>
+<pre><code class="language-bash"># 创建micro ros工具
+mkdir microros_ws
+cd microros_ws
+git clone -b $ROS_DISTRO https://github.com/micro-ROS/micro_ros_setup.git src/micro_ros_setup
+
+sudo apt update &amp;&amp; rosdep update
+rosdep install --from-paths src --ignore-src -y
+
+colcon build
+source install/local_setup.bash
+</code></pre>
+<h3 id="12-准备firmware"><a class="header" href="#12-准备firmware">1.2 准备<code>firmware</code></a></h3>
+<pre><code class="language-bash">ros2 run micro_ros_setup create_firmware_ws.sh generate_lib
+</code></pre>
+<p><strong>可能出现的问题1</strong>：<code>vcs not found </code></p>
+<pre><code class="language-bash">vcs not found 
+command 'vcs' not found , but there are 17 similar ones.
+</code></pre>
+<p>缺少<code> python3-vcstool</code>软件包</p>
+<pre><code class="language-bash">sudo apt-get install python3-vcstool
+</code></pre>
+<p><strong>可能出现的问题2</strong>：<code>colcon: error: unrecognized arguments:</code></p>
+<pre><code class="language-bash">colcon: error: unrecognized arguments: --packages-ignore-regex
+</code></pre>
+<p><code>coclon</code>安装不全</p>
+<pre><code class="language-bash">pip install -U colcon-common-extensions
+</code></pre>
+<p>正确下载firmware和编后的文件夹结构如下：</p>
+<pre><code class="language-bash">$ tree -L 2
+
+.
+├── COLCON_IGNORE
+├── dev_ws
+│   ├── ament
+│   ├── build
+│   ├── install
+│   ├── log
+│   ├── ros2
+│   └── ros2.repos
+├── mcu_ws
+│   ├── build
+│   ├── colcon.meta
+│   ├── eProsima
+│   ├── install
+│   ├── log
+│   ├── ros2
+│   ├── ros2.repos
+│   └── uros
+└── PLATFORM
+</code></pre>
+<h3 id="13-编译-静态文件库"><a class="header" href="#13-编译-静态文件库">1.3 编译 静态文件库</a></h3>
+<p>定义交叉编译规则：<code>my_custom_toolchain.cmake</code></p>
+<pre><code class="language-cmake"># 使用交叉编译 目标：嵌入式平台
+SET(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_CROSSCOMPILING 1)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+# 交叉编译链:参考单片机端的rtconfig.py编译版本
+set(TOOLS /home/haijun/env_released_1.2.0/gcc-arm-none-eabi-5_4-2016q3/bin/)
+set(CMAKE_C_COMPILER ${TOOLS}arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER ${TOOLS}arm-none-eabi-g++)
+
+SET(CMAKE_C_COMPILER_WORKS 1 CACHE INTERNAL &quot;&quot;)
+SET(CMAKE_CXX_COMPILER_WORKS 1 CACHE INTERNAL &quot;&quot;)
+
+
+# SET HERE YOUR BUILDING FLAGS：参考rtconfig.py的DEVICE的配置
+
+set(FLAGS &quot;-O2 -mfloat-abi=softfp -mfpu=fpv5-sp-d16 -mfloat-abi=hard  -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -fno-exceptions -mcpu=cortex-m7 -DF_CPU=480000000L -DARDUINO=10813 -mthumb -DSTM32H750XX&quot; CACHE STRING &quot;&quot; FORCE)
+
+
+set(CMAKE_C_FLAGS_INIT &quot;-std=c11 ${FLAGS} -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='&quot; CACHE STRING &quot;&quot; FORCE)
+set(CMAKE_CXX_FLAGS_INIT &quot;-std=c++11 ${FLAGS} -fno-rtti -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='&quot; CACHE STRING &quot;&quot; FORCE)
+
+set(__BIG_ENDIAN__ 0)
+
+</code></pre>
+<p>定义静态库包含的头文件：<code>my_custom_colcon.meta</code></p>
+<pre><code>{
+    &quot;names&quot;: {
+        &quot;tracetools&quot;: {
+            &quot;cmake-args&quot;: [
+                &quot;-DTRACETOOLS_DISABLED=ON&quot;,
+                &quot;-DTRACETOOLS_STATUS_CHECKING_TOOL=OFF&quot;
+            ]
+        },
+        &quot;rosidl_typesupport&quot;: {
+            &quot;cmake-args&quot;: [
+                &quot;-DROSIDL_TYPESUPPORT_SINGLE_TYPESUPPORT=ON&quot;
+            ]
+        },
+        &quot;rcl&quot;: {
+            &quot;cmake-args&quot;: [
+                &quot;-DBUILD_TESTING=OFF&quot;,
+                &quot;-DRCL_COMMAND_LINE_ENABLED=OFF&quot;,
+                &quot;-DRCL_LOGGING_ENABLED=OFF&quot;
+            ]
+        }, 
+        &quot;rcutils&quot;: {
+            &quot;cmake-args&quot;: [
+                &quot;-DENABLE_TESTING=OFF&quot;,
+                &quot;-DRCUTILS_NO_FILESYSTEM=ON&quot;,
+                &quot;-DRCUTILS_NO_THREAD_SUPPORT=ON&quot;,
+                &quot;-DRCUTILS_NO_64_ATOMIC=ON&quot;,
+                &quot;-DRCUTILS_AVOID_DYNAMIC_ALLOCATION=ON&quot;
+            ]
+        },
+        &quot;microxrcedds_client&quot;: {
+            &quot;cmake-args&quot;: [
+                &quot;-DUCLIENT_PIC=OFF&quot;,
+                &quot;-DUCLIENT_PROFILE_UDP=OFF&quot;,
+                &quot;-DUCLIENT_PROFILE_TCP=OFF&quot;,
+                &quot;-DUCLIENT_PROFILE_DISCOVERY=OFF&quot;,
+                &quot;-DUCLIENT_PROFILE_SERIAL=OFF&quot;,
+                &quot;-UCLIENT_PROFILE_STREAM_FRAMING=ON&quot;,
+                &quot;-DUCLIENT_PROFILE_CUSTOM_TRANSPORT=ON&quot;
+            ]
+        },
+        &quot;rmw_microxrcedds&quot;: {
+            &quot;cmake-args&quot;: [
+                &quot;-DRMW_UXRCE_MAX_NODES=1&quot;,
+                &quot;-DRMW_UXRCE_MAX_PUBLISHERS=10&quot;,
+                &quot;-DRMW_UXRCE_MAX_SUBSCRIPTIONS=5&quot;,
+                &quot;-DRMW_UXRCE_MAX_SERVICES=1&quot;,
+                &quot;-DRMW_UXRCE_MAX_CLIENTS=1&quot;,
+                &quot;-DRMW_UXRCE_MAX_HISTORY=4&quot;,
+                &quot;-DRMW_UXRCE_TRANSPORT=custom&quot;
+            ]
+        }
+    }
+}
+</code></pre>
+<p>编译静态库：</p>
+<pre><code class="language-bas">ros2 run micro_ros_setup build_firmware.sh $(pwd)/my_custom_toolchain.cmake $(pwd)/my_custom_colcon.meta
+</code></pre>
+<p>一共编译会编译64个包，其中会出现一些警告。编译时间1min多</p>
+<pre><code class="language-bash">Summary: 64 packages finished [1min 10s]
+  40 packages had stderr output: action_msgs actionlib_msgs builtin_interfaces composition_interfaces diagnostic_msgs example_interfaces geometry_msgs libyaml_vendor lifecycle_msgs micro_ros_msgs micro_ros_utilities microxrcedds_client nav_msgs rcl rcl_action rcl_interfaces rcl_lifecycle rcl_logging_interface rcl_logging_noop rclc rclc_lifecycle rclc_parameter rcutils rmw rmw_implementation rmw_microxrcedds rosgraph_msgs rosidl_runtime_c rosidl_typesupport_c rosidl_typesupport_microxrcedds_c sensor_msgs shape_msgs statistics_msgs std_msgs std_srvs stereo_msgs test_msgs trajectory_msgs unique_identifier_msgs visualization_msgs
+</code></pre>
+<p>静态库和头文件在<code>firmware/build</code>中</p>
+<pre><code class="language-bash">haijun@haijun-Lenovo:~/micro_ROS/microros_ws/firmware/build$ tree -L 2
+.
+├── include
+│   ├── actionlib_msgs
+│   ├── action_msgs
+│   ├── builtin_interfaces
+│   ├── composition_interfaces
+│   ├── diagnostic_msgs
+│   ├── example_interfaces
+│   ├── geometry_msgs
+│   ├── lifecycle_msgs
+│   ├── micro_ros_msgs
+│   ├── micro_ros_utilities
+│   ├── nav_msgs
+│   ├── rcl
+│   ├── rcl_action
+│   ├── rclc
+│   ├── rclc_lifecycle
+│   ├── rclc_parameter
+│   ├── rcl_interfaces
+│   ├── rcl_lifecycle
+│   ├── rcl_logging_interface
+│   ├── rcutils
+│   ├── rmw
+│   ├── rmw_microros
+│   ├── rmw_microxrcedds_c
+│   ├── rosgraph_msgs
+│   ├── rosidl_runtime_c
+│   ├── rosidl_typesupport_c
+│   ├── rosidl_typesupport_interface
+│   ├── rosidl_typesupport_introspection_c
+│   ├── rosidl_typesupport_microxrcedds_c
+│   ├── sensor_msgs
+│   ├── shape_msgs
+│   ├── statistics_msgs
+│   ├── std_msgs
+│   ├── std_srvs
+│   ├── stereo_msgs
+│   ├── test_msgs
+│   ├── tracetools
+│   ├── trajectory_msgs
+│   ├── ucdr
+│   ├── unique_identifier_msgs
+│   ├── uxr
+│   ├── visualization_msgs
+│   └── yaml.h
+└── libmicroros.a
+
+43 directories, 2 files
+</code></pre>
+<h2 id="14-部署到单片机端"><a class="header" href="#14-部署到单片机端">1.4 部署到单片机端</a></h2>
+<p>参考链接：https://github.com/ros2middleware/micro_ros_RTThread_apps/tree/galactic</p>
+<p>基于micro_ros_RTThread_apps的配置：</p>
+<ul>
+<li>Device type (UART)</li>
+<li>ARCH CPU (Cortex M7 (fpv5-d16-hard))  ---&gt; </li>
+<li>uart1) serial device name </li>
+<li>[*]   microros_pub_int32: microros publish int32 example</li>
+<li>[*]   microros_sub_int32: micro ros subscribe int32 example</li>
+<li>Version (galactic)  ---&gt; </li>
+</ul>
+<p>由于生成的头文件和原有micro_ros-galactic的头文件有出入 ，为了快速部署，修改了micro_ros-galactic的文件布局：</p>
+<ul>
+<li>新增<code>include</code>文件夹，防止<code>firmware</code>生成的头文件</li>
+<li>把原来<code>src</code>文件夹中的<code>micro_ros_rtt.h</code>,  <code>yaml.h</code></li>
+<li>libmicroros.a直接放在<code>micro_ros-galactic</code>w文件下</li>
+<li><code>src</code>文件夹只保留<code>.c</code>文件</li>
+</ul>
+<p>因此会导致micro_ros的以下配置失效：</p>
+<ul>
+<li>ARCH CPU (Cortex M7 (fpv5-d16-hard))  ---&gt; </li>
+</ul>
+<p>再稍微修改<code>SConscript</code></p>
+<pre><code># 获取静态文件的位置
+LIBPATH = [cwd]
+# 获取头文件位置
+path	= [cwd]
+path	+= [cwd + '/include']
+</code></pre>
+<p><strong>编译中可能出现错误：</strong></p>
+<pre><code class="language-bash">In file included from packages/micro_ros-galactic/include/rmw/qos_profiles.h:23:0,
+                 from packages/micro_ros-galactic/include/rmw/rmw.h:103,
+                 from packages/micro_ros-galactic/include/rmw_microros/rmw_microros.h:20,
+                 from packages/micro_ros-galactic/include/micro_ros_rtt.h:13,
+                 from packages/micro_ros-galactic/examples/micro_ros_pub_int32.c:5:
+packages/micro_ros-galactic/include/rmw/types.h:418:49: error: expected ',' or '}' before '__attribute__'
+ # define RMW_DECLARE_DEPRECATED(name, msg) name __attribute__((deprecated(msg)))
+                                                 ^
+packages/micro_ros-galactic/include/rmw/types.h:439:3: note: in expansion of macro 'RMW_DECLARE_DEPRECATED'
+   RMW_DECLARE_DEPRECATED(
+   ^
+In file included from packages/micro_ros-galactic/include/rmw/rmw.h:103:0,
+                 from packages/micro_ros-galactic/include/rmw_microros/rmw_microros.h:20,
+                 from packages/micro_ros-galactic/include/micro_ros_rtt.h:13,
+                 from packages/micro_ros-galactic/examples/micro_ros_pub_int32.c:5:
+packages/micro_ros-galactic/include/rmw/qos_profiles.h:111:3: error: 'RMW_QOS_POLICY_LIVELINESS_UNKNOWN' undeclared here (not in a function)
+   RMW_QOS_POLICY_LIVELINESS_UNKNOWN,
+</code></pre>
+<p>知道错误由<code>define RMW_DECLARE_DEPRECATED(name, msg) name __attribute__((deprecated(msg)))</code>引起，但是不知道原有，因此删除<code>__attribute__((deprecated(msg)))</code></p>
+<pre><code class="language-c">// 位置：/micro_ros-galactic/include/rmw/types.h:418
+# define RMW_DECLARE_DEPRECATED(name, msg) name 
+</code></pre>
+<h2 id="15-运行"><a class="header" href="#15-运行">1.5 运行</a></h2>
+<p><strong>出现问题</strong>: 建立连接失败</p>
+<p>单片机：</p>
+<pre><code class="language-bash">msh &gt;microros_pub_int32
+[E/micro_ros_serial] succeed to open device uart1
+[micro_ros] failed to initialize
+msh &gt;
+</code></pre>
+<p>PC 端：</p>
+<pre><code class="language-bash">haijun@haijun-Lenovo:/dev$ ros2 run micro_ros_agent micro_ros_agent serial -D /dev/ttyUSB0 
+[1659538409.675036] info     | TermiosAgentLinux.cpp | init                     | running...             | fd: 3
+[1659538409.675183] info     | Root.cpp           | set_verbose_level        | logger setup           | verbose_level: 4
+[1659538417.480562] info     | Root.cpp           | create_client            | create                 | client_key: 0x6EEC6270, session_id: 0x81
+[1659538417.480852] info     | SessionManager.hpp | establish_session        | session established    | client_key: 0x6EEC6270, address: 0
+[1659538418.720121] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538419.969156] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538421.218229] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538422.467203] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538423.716348] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538424.965481] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538426.214506] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538427.463394] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+[1659538428.712708] info     | SessionManager.hpp | establish_session        | session re-established | client_key: 0x6EEC6270, address: 0
+
+</code></pre>
+<p>原因未知，但是可以估计是<code>int clock_gettime(clockid_t unused, struct timespec *tp)</code>的原因</p>
+<p>修改：</p>
+<pre><code class="language-c">int clock_gettime(clockid_t unused, struct timespec *tp)
+{
+    (void)unused;
+    static uint32_t rollover = 0;
+    static uint32_t last_measure = 0;
+
+    uint32_t m = rt_tick_get() * 1000 / RT_TICK_PER_SECOND * 1000;
+
+    rollover += (m &lt; last_measure) ? 1 : 0;
+
+    rt_uint64_t real_us = (rt_uint64_t) (m + rollover * micro_rollover_useconds);
+
+    tp-&gt;tv_sec = real_us / 1000000;
+    
+    last_measure = m;
+    last_measure = m;
+
+    return 0;
+}
+</code></pre>
+<p><strong>能通信成功，但是仅是权宜之计</strong></p>
+<p>通信测试</p>
+<p>单片机端:</p>
+<pre><code class="language-bash">msh &gt;microros_sub_int32
+[E/micro_ros_serial] succeed to open device uart1
+[micro_ros] node created
+[micro_ros] executor created
+[micro_ros] New thread mr_subint32
+msh &gt;[micro_ros] received data 1
+[micro_ros] received data 1
+[micro_ros] received data 1
+[micro_ros] received data 1
+[micro_ros] received data 1
+[micro_ros] received data 1
+[micro_ros] received data 1
+</code></pre>
+<p>PC 端：</p>
+<pre><code># 参看话题 &amp; 类型
+aijun@haijun-Lenovo:/dev$ ros2 topic list -t
+/micro_ros_rtt_subscriber [std_msgs/msg/Int32]
+/parameter_events [rcl_interfaces/msg/ParameterEvent]
+/rosout [rcl_interfaces/msg/Log]
+
+
+# 发送话题
+haijun@haijun-Lenovo:/dev$ ros2 topic pub /micro_ros_rtt_subscriber std_msgs/msg/Int32 &quot;{data: 1}&quot;
+publisher: beginning loop
+publishing #1: std_msgs.msg.Int32(data=1)
+
+publishing #2: std_msgs.msg.Int32(data=1)
+
+publishing #3: std_msgs.msg.Int32(data=1)
+
+publishing #4: std_msgs.msg.Int32(data=1)
+
+publishing #5: std_msgs.msg.Int32(data=1)
+
+publishing #6: std_msgs.msg.Int32(data=1)
+
+publishing #7: std_msgs.msg.Int32(data=1)
+</code></pre>
+<h2 id="1-6-待解决问题"><a class="header" href="#1-6-待解决问题">1. 6 待解决问题</a></h2>
+<ul>
+<li>int clock_gettime(clockid_t unused, struct timespec *tp)</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week6"><a class="header" href="#week6">week6</a></h1>
+<blockquote>
+<p>2022/08/08 - 2022/08/012</p>
+</blockquote>
+<h2 id="上周任务-1"><a class="header" href="#上周任务-1">上周任务</a></h2>
+<ul>
+<li>尝试寻找分离rclc rmw的方法；</li>
+</ul>
+<h2 id="完成情况-1"><a class="header" href="#完成情况-1">完成情况</a></h2>
+<p>micro ros 构建复杂，一共有25个文件，64个包，编译出108个静态文件，因此文件和文件之间存在一定的依赖关系，在编译过程中ament贯穿整个编译过程，其作用大致如下：</p>
+<ul>
+<li>调用cmake编译c文件；</li>
+<li>将..msg  .srv等ROS消息类型转换为c文件；</li>
+</ul>
+<p>因此micro ros 以rclc 和Micro-XRCE-DDS为基础，以ROS消息类型，适配和转化rclc、Micro-XRCE-DDS支撑文件为辅助；<strong>所以分离难度较大</strong>；</p>
+<p>目前尝试过脱离ament，直接使用cmake进行交叉编译，以Micro-CDR、Micro-XRCE-DDS-Client进行尝试（Micro-CDR无依赖；Micro-XRCE-DDS-Clien依赖于Micro-CDR）。</p>
+<h2 id="周会拟讨论内容"><a class="header" href="#周会拟讨论内容">周会拟讨论内容</a></h2>
+<ul>
+<li>micro ros 仓库里为freertos ， cubemx提供的程序基本是通过<code>micro_ros_setup</code>下载源码，调用ament编译源码，添加编译出的静态文件到工程，因此如果实现任务三：集成到 micro_ros 官方的编译系统实际上可以不分离 rclc rmw</li>
+<li>分离rclc rmw的目前想法：先剥离ament，使用cmake编译，再使用scons构建（ament负责将ROS消息类型转化为c的工作，这一部分的处理将是难点）</li>
+</ul>
+<h2 id="工作内容生成静态库过程分析"><a class="header" href="#工作内容生成静态库过程分析">工作内容：生成静态库过程分析</a></h2>
+<h3 id="源码"><a class="header" href="#源码">源码</a></h3>
+<pre><code>ros2 run micro_ros_setup create_firmware_ws.sh generate_lib
+</code></pre>
+<ol>
+<li>clone <code>ament</code>相关的包 ----- <code>/firmware/dev_ws</code> ---- 构建工具</li>
+<li>clone <code>micro ros</code>相关包 ---- <code>/firmware/mcu_ws</code>  ----- micro ros 相关的源代码</li>
+<li>编译ament相关包</li>
+</ol>
+<pre><code class="language-bash">├── colcon.meta
+├── eProsima						# DDS源文件
+│   ├── Micro-CDR					# 实现 CDR 标准序列化方法的 C 库
+│   └── Micro-XRCE-DDS-Client		# DDS客户端
+├── ros2							# ros2相关源文件
+│   ├── common_interfaces			# (.msg and .srv)文件（不是c 库）
+│   ├── example_interfaces			# 消息类型example (不是C 库)
+│   ├── libyaml_vendor				# 下载和构建 libyaml
+│   ├── rcl							# rcl 包相关的包
+│   ├── rcl_interfaces				# 接口文件（.msg 和 .srv）
+│   ├── rcl_logging					# 日志
+│   ├── rcpputils					# C++ API
+│   ├── rmw							# 中间件
+│   ├── rmw_implementation			# RMW_IMPLEMENTATION 可选可用的rmw实现
+│   ├── rosidl						# 将.msg/.srv/.action 文件转化为相关的接口（.idl/c/cpp）
+│   ├── rosidl_dds
+│   ├── rosidl_defaults
+│   ├── test_interface_files
+│   └── unique_identifier_msgs
+├── ros2.repos
+└── uros
+    ├── micro_ros_msgs				#  micro-ROS 实现过程中使用ROS 2 消息定义的集合
+    ├── micro_ros_utilities			# 提供通用程序，
+    ├── rcl							# 和 ros2/rcl文件内容一致
+    ├── rclc						# ROS 客户端支持库 (rcl)
+    ├── rcutils						# c API ROS 2 中常用的函数和数据结构
+    ├── rmw_microxrcedds			# 实现Micro XRCE-DDS
+    ├── rosidl_typesupport			# 为ROS中的消息提供支持
+    ├── rosidl_typesupport_microxrcedds 
+    └── tracetools
+
+</code></pre>
+<h3 id="构建"><a class="header" href="#构建">构建</a></h3>
+<pre><code class="language-bash">ros2 run micro_ros_setup build_firmware.sh $(pwd)/my_custom_toolchain.cmake $(pwd)/my_custom_colcon.meta
+</code></pre>
+<p>调用脚本：</p>
+<ol>
+<li><code>build_firmware.sh</code>
+<ol>
+<li>检查<code>micro_ros_setup</code>环境</li>
+<li>检查<code>firmware</code>是否存在</li>
+<li>source dev_ws环境</li>
+<li>调用<code>config/generate_lib/generic/build.sh</code></li>
+</ol>
+</li>
+<li><code>config/generate_lib/generic/build.sh</code>:该脚本中调用了<code>my_custom_toolchain.cmake 和my_custom_colcon.meta </code>
+<ol>
+<li>判断使用哪里的<code>my_custom_colcon.meta</code>文件</li>
+<li>进入<code>/mcu_ws</code>, 删除原有的<code>build, install log 文件</code></li>
+<li>调用<code>colcon</code>编译:</li>
+</ol>
+</li>
+</ol>
+<pre><code class="language-sh">
+pushd $FW_TARGETDIR/mcu_ws &gt;/dev/null
+
+	rm -rf build install log
+	
+   	colcon build \
+		--merge-install \							#添加包环境变量时，路径较短
+		--packages-ignore-regex=.*_cpp \			# 没有查找到.*_cpp的文件
+		--metas $COLCON_META \						# 调用my_custom_colcon.meta
+		--cmake-args \								# 使用cmake的命令
+		&quot;--no-warn-unused-cli&quot; \
+		-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF \	# 是否将创建与位置无关的可执行文件或共享库
+		-DTHIRDPARTY=ON \
+		-DBUILD_SHARED_LIBS=OFF \						# 所有库构建为共享库
+		-DBUILD_TESTING=OFF \
+		-DCMAKE_BUILD_TYPE=Release \					# 构建类型：Release
+		-DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN \				# 交叉编译构建的工具链
+		-DCMAKE_VERBOSE_MAKEFILE=ON; \					# 详细输出
+</code></pre>
+<ol start="4">
+<li>将<code>mcu_ws/install/lib/*.a</code>生成库文件<code>libmicroros.a</code></li>
+</ol>
+<h3 id="参与构建的包"><a class="header" href="#参与构建的包">参与构建的包</a></h3>
+<pre><code> rosidl_typesupport_interface [1.46s]
+ rmw_implementation_cmake [1.46s]
+ test_interface_files [2.57s]
+ tracetools [2.73s]
+ tracetools_trace [2.92s]
+ rosidl_cli [3.06s]
+ microcdr [3.68s]
+ rcutils [4.11s]
+ tracetools_read [2.85s]
+ ros2trace [2.39s]
+ tracetools_launch [2.45s]
+ rosidl_adapter [2.72s]
+ rcl_logging_interface [1.99s]
+ rosidl_runtime_c [2.22s]
+ microxrcedds_client [2.77s]
+ rcl_logging_noop [1.35s]
+ rosidl_parser [1.77s]
+ rmw [2.18s]
+ rosidl_cmake [1.64s]
+ libyaml_vendor [7.86s]
+ rosidl_generator_dds_idl [1.59s]
+ rosidl_typesupport_introspection_c [1.75s]
+ rosidl_generator_c [1.98s]
+ rosidl_typesupport_microxrcedds_c [2.02s]
+ micro_ros_utilities [1.59s]
+ rosidl_typesupport_c [1.67s]
+ rosidl_default_runtime [0.72s]
+ rosidl_default_generators [0.73s]
+ unique_identifier_msgs [4.04s]
+ micro_ros_msgs [4.44s]
+ builtin_interfaces [4.51s]
+ std_srvs [4.89s]
+ lifecycle_msgs [8.08s]
+ rmw_microxrcedds [4.35s]
+ rosgraph_msgs [5.58s]
+ statistics_msgs [6.22s]
+ action_msgs [6.68s]
+ rosidl_typesupport_microxrcedds_test_msg [2.67s]
+ rmw_implementation [2.75s]
+ rosidl_typesupport_microxrcedds_c_tests [1.94s]
+ rcl_interfaces [15.0s]
+ std_msgs [18.0s]
+ tracetools_test [4.22s]
+ composition_interfaces [8.45s]
+ actionlib_msgs [7.62s]
+ example_interfaces [20.0s]
+ test_msgs [20.6s]
+ test_rmw_implementation [1.45s]
+ rcl [3.55s]
+ rcl_lifecycle [2.72s]
+ geometry_msgs [15.7s]
+ rcl_action [3.11s]
+ rclc [3.27s]
+ rclc_lifecycle [3.94s]
+ rclc_parameter [4.46s]
+ shape_msgs [7.62s]
+ trajectory_msgs [7.97s]
+ diagnostic_msgs [8.81s]
+ nav_msgs [12.9s]
+ visualization_msgs [14.9s]
+ sensor_msgs [22.4s]
+ sensor_msgs_py [1.61s]
+ stereo_msgs [3.01s]
+ common_interfaces [0.78s]
+</code></pre>
+<h3 id="包与包的依赖关系"><a class="header" href="#包与包的依赖关系">包与包的依赖关系：</a></h3>
+<pre><code class="language-bash">colcon graph --dot | dot -Tpng -o graph.png
+#blue=build, red=run, tan=test
+# A ---&gt; B :表示 A的构建依赖于B
+</code></pre>
+<p><img src="./picture/week6/graph.png" alt="graph" /></p>
+<h3 id="各个包生成的静态文件"><a class="header" href="#各个包生成的静态文件">各个包生成的静态文件：</a></h3>
+<pre><code>libactionlib_msgs__rosidl_generator_c.a
+libactionlib_msgs__rosidl_typesupport_c.a
+libactionlib_msgs__rosidl_typesupport_introspection_c.a
+libactionlib_msgs__rosidl_typesupport_microxrcedds_c.a
+libaction_msgs__rosidl_generator_c.a
+libaction_msgs__rosidl_typesupport_c.a
+libaction_msgs__rosidl_typesupport_introspection_c.a
+libaction_msgs__rosidl_typesupport_microxrcedds_c.a
+libbuiltin_interfaces__rosidl_generator_c.a
+libbuiltin_interfaces__rosidl_typesupport_c.a
+libbuiltin_interfaces__rosidl_typesupport_introspection_c.a
+libbuiltin_interfaces__rosidl_typesupport_microxrcedds_c.a
+libcomposition_interfaces__rosidl_generator_c.a
+libcomposition_interfaces__rosidl_typesupport_c.a
+libcomposition_interfaces__rosidl_typesupport_introspection_c.a
+libcomposition_interfaces__rosidl_typesupport_microxrcedds_c.a
+libdiagnostic_msgs__rosidl_generator_c.a
+libdiagnostic_msgs__rosidl_typesupport_c.a
+libdiagnostic_msgs__rosidl_typesupport_introspection_c.a
+libdiagnostic_msgs__rosidl_typesupport_microxrcedds_c.a
+libexample_interfaces__rosidl_generator_c.a
+libexample_interfaces__rosidl_typesupport_c.a
+libexample_interfaces__rosidl_typesupport_introspection_c.a
+libexample_interfaces__rosidl_typesupport_microxrcedds_c.a
+libgeometry_msgs__rosidl_generator_c.a
+libgeometry_msgs__rosidl_typesupport_c.a
+libgeometry_msgs__rosidl_typesupport_introspection_c.a
+libgeometry_msgs__rosidl_typesupport_microxrcedds_c.a
+liblifecycle_msgs__rosidl_generator_c.a
+liblifecycle_msgs__rosidl_typesupport_c.a
+liblifecycle_msgs__rosidl_typesupport_introspection_c.a
+liblifecycle_msgs__rosidl_typesupport_microxrcedds_c.a
+libmicrocdr.a
+libmicro_ros_msgs__rosidl_generator_c.a
+libmicro_ros_msgs__rosidl_typesupport_c.a
+libmicro_ros_msgs__rosidl_typesupport_introspection_c.a
+libmicro_ros_msgs__rosidl_typesupport_microxrcedds_c.a
+libmicro_ros_utilities.a
+libmicroxrcedds_client.a
+libnav_msgs__rosidl_generator_c.a
+libnav_msgs__rosidl_typesupport_c.a
+libnav_msgs__rosidl_typesupport_introspection_c.a
+libnav_msgs__rosidl_typesupport_microxrcedds_c.a
+librcl.a
+librcl_action.a
+librclc.a
+librclc_lifecycle.a
+librclc_parameter.a
+librcl_interfaces__rosidl_generator_c.a
+librcl_interfaces__rosidl_typesupport_c.a
+librcl_interfaces__rosidl_typesupport_introspection_c.a
+librcl_interfaces__rosidl_typesupport_microxrcedds_c.a
+librcl_lifecycle.a
+librcl_logging_interface.a
+librcl_logging_noop.a
+librcutils.a
+librmw.a
+librmw_microxrcedds.a
+librosgraph_msgs__rosidl_generator_c.a
+librosgraph_msgs__rosidl_typesupport_c.a
+librosgraph_msgs__rosidl_typesupport_introspection_c.a
+librosgraph_msgs__rosidl_typesupport_microxrcedds_c.a
+librosidl_runtime_c.a
+librosidl_typesupport_c.a
+librosidl_typesupport_introspection_c.a
+librosidl_typesupport_microxrcedds_c.a
+libsensor_msgs__rosidl_generator_c.a
+libsensor_msgs__rosidl_typesupport_c.a
+libsensor_msgs__rosidl_typesupport_introspection_c.a
+libsensor_msgs__rosidl_typesupport_microxrcedds_c.a
+libshape_msgs__rosidl_generator_c.a
+libshape_msgs__rosidl_typesupport_c.a
+libshape_msgs__rosidl_typesupport_introspection_c.a
+libshape_msgs__rosidl_typesupport_microxrcedds_c.a
+libstatistics_msgs__rosidl_generator_c.a
+libstatistics_msgs__rosidl_typesupport_c.a
+libstatistics_msgs__rosidl_typesupport_introspection_c.a
+libstatistics_msgs__rosidl_typesupport_microxrcedds_c.a
+libstd_msgs__rosidl_generator_c.a
+libstd_msgs__rosidl_typesupport_c.a
+libstd_msgs__rosidl_typesupport_introspection_c.a
+libstd_msgs__rosidl_typesupport_microxrcedds_c.a
+libstd_srvs__rosidl_generator_c.a
+libstd_srvs__rosidl_typesupport_c.a
+libstd_srvs__rosidl_typesupport_introspection_c.a
+libstd_srvs__rosidl_typesupport_microxrcedds_c.a
+libstereo_msgs__rosidl_generator_c.a
+libstereo_msgs__rosidl_typesupport_c.a
+libstereo_msgs__rosidl_typesupport_introspection_c.a
+libstereo_msgs__rosidl_typesupport_microxrcedds_c.a
+libtest_msgs__rosidl_generator_c.a
+libtest_msgs__rosidl_typesupport_c.a
+libtest_msgs__rosidl_typesupport_introspection_c.a
+libtest_msgs__rosidl_typesupport_microxrcedds_c.a
+libtracetools.a
+libtrajectory_msgs__rosidl_generator_c.a
+libtrajectory_msgs__rosidl_typesupport_c.a
+libtrajectory_msgs__rosidl_typesupport_introspection_c.a
+libtrajectory_msgs__rosidl_typesupport_microxrcedds_c.a
+libunique_identifier_msgs__rosidl_generator_c.a
+libunique_identifier_msgs__rosidl_typesupport_c.a
+libunique_identifier_msgs__rosidl_typesupport_introspection_c.a
+libunique_identifier_msgs__rosidl_typesupport_microxrcedds_c.a
+libvisualization_msgs__rosidl_generator_c.a
+libvisualization_msgs__rosidl_typesupport_c.a
+libvisualization_msgs__rosidl_typesupport_introspection_c.a
+libvisualization_msgs__rosidl_typesupport_microxrcedds_c.a
+libyaml.a
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week7"><a class="header" href="#week7">week7</a></h1>
+<blockquote>
+<p>2022/08/015 - 2022/08/020</p>
+</blockquote>
+<h3 id="上周任务-2"><a class="header" href="#上周任务-2">上周任务</a></h3>
+<p>基于cmake编译包，剥离ament，并顺便把它的编译使用到的源文件一起复制出来。</p>
+<p><strong>方法：</strong></p>
+<ul>
+<li>删除CmakeLists.txt中和ament相关的命令；</li>
+<li>手动补充头文件和静态库的链接</li>
+<li>通过自定义命令，复制出参与编译的源文件；</li>
+</ul>
+<h2 id="完成情况-2"><a class="header" href="#完成情况-2">完成情况</a></h2>
+<p>以<code>rmw rcl</code>为核心编译其相关依赖的包，完成了大部分；在该部分包中，ament的主要作用提供依赖关系和搜索路径，<code>rmw_implementation</code>包比较特殊，没有编译成功：<code>rmw_implementation</code>的依赖包<code>rmw_implementation_cmake</code>里面没有c文件，导致编译后什么没有生成，而<code>rmw_implementation</code>的<code>CmakeLists.txt</code>出现几个无法识别的命令，导致编译失败。</p>
+<p>最复杂的包是<code>rosidl_*</code>相关的包，他们的<code>CmakeList.txt</code>不是为了编译出静态文件和复制公共头文件，而是复制一些python脚本，比如<code>rosidl_default_generators</code>, <code>rosidl_generator_c</code>。这部分和ament的耦合非常严重，剥离ament相关包后会导致不清楚该包的作用和它的上层包如何使用。</p>
+<h2 id="周会讨论主题"><a class="header" href="#周会讨论主题">周会讨论主题</a></h2>
+<ul>
+<li>idl、msg相关的包剥离amnet的难度较大，ament似乎还负责调用python脚本的功能，因此，感觉完全剥离ament越来越现实，得寻找突破点；</li>
+</ul>
+<h2 id="package-编译日志"><a class="header" href="#package-编译日志">package 编译日志</a></h2>
+<p>包的依赖关系：</p>
+<p><img src="./picture/week7/graph.png" alt="graph" /></p>
+<p>基本编译条件</p>
+<pre><code class="language-shell"># 交叉编译路径
+Toolchain=&quot;$PWD&quot;&quot;/my_custom_toolchain.cmake&quot;
+# install路径
+Dir_Install=&quot;$PWD&quot;&quot;/install&quot;
+#当前文件路径
+Base_File=&quot;$PWD&quot;
+#基本编译参数
+Base_Param=&quot;-DCMAKE_TOOLCHAIN_FILE=${Toolchain}\
+        -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF \
+        -DTHIRDPARTY=ON \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_INSTALL_PREFIX=$Dir_Install \
+        -DCMAKE_PREFIX_PATH=$Dir_Install&quot;
+</code></pre>
+<h3 id="1--micro-cdr"><a class="header" href="#1--micro-cdr">1 . <em>Micro-CDR</em></a></h3>
+<pre><code class="language-shell"># 路径：firmware/eProsima/Micro-CDR
+#无依赖
+# 添加编译宏
+External_param=&quot;-DUCDR_ISOLATED_INSTALL=OFF&quot;
+</code></pre>
+<p>CmakeLists.txt文件修改</p>
+<pre><code class="language-cmake"># set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${PROJECT_BINARY_DIR}/temp_install)
+
+set(dir_sources)
+# 遍历c 文件 &amp; 把c文件的路径改为绝对路径
+FOREACH(list ${cdr_sources}) 
+    list(APPEND dir_sources ${CMAKE_CURRENT_SOURCE_DIR}/${list})
+ENDFOREACH(list)  
+# 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${dir_sources}  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)
+</code></pre>
+<h3 id="2-micro-xrce-dds-client"><a class="header" href="#2-micro-xrce-dds-client">2. Micro-XRCE-DDS-Client</a></h3>
+<pre><code class="language-shell"># 路径：/firmware/eProsima/Micro-XRCE-DDS-Client
+# 依赖于Micro-CDR
+# 添加编译宏
+External_param=&quot;-DUCLIENT_ISOLATED_INSTALL=OFF -DUCLIENT_PROFILE_UDP=OFF \
+                -DUCLIENT_PIC=OFF -DUCLIENT_PROFILE_UDP=OFF -DUCLIENT_PROFILE_UDP=OFF \
+                -DUCLIENT_PROFILE_TCP=OFF -DUCLIENT_PROFILE_DISCOVERY=OFF -DUCLIENT_PROFILE_SERIAL=OFF \
+                -UCLIENT_PROFILE_STREAM_FRAMING=ON -DUCLIENT_PROFILE_CUSTOM_TRANSPORT=ON&quot;
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake">set(dir_sources)
+# 遍历c 文件 &amp; 把c文件的路径改为绝对路径
+FOREACH(list ${SRCS}) 
+    if(list MATCHES &quot;OFF&quot;)
+        message(STATUS &quot;=============${list}&quot;)
+    else()
+        list(APPEND dir_sources ${CMAKE_CURRENT_SOURCE_DIR}/${list})
+    endif()
+ENDFOREACH(list)  
+# 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${dir_sources}  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)
+</code></pre>
+<h3 id="3-rcutils"><a class="header" href="#3-rcutils">3. <em>rcutils</em></a></h3>
+<pre><code class="language-shell"># 路径：/firmware/uros/rcutils
+# 无依赖
+# 编译宏
+External_param=&quot;-DENABLE_TESTING=OFF -DRCUTILS_NO_FILESYSTEM=ON -DRCUTILS_NO_THREAD_SUPPORT=ON \
+                -DRCUTILS_NO_64_ATOMIC=ON -DRCUTILS_AVOID_DYNAMIC_ALLOCATION=ON&quot;
+
+set(dir_sources)
+# 遍历c 文件 &amp; 把c文件的路径改为绝对路径
+FOREACH(list ${rcutils_sources}) 
+  list(APPEND dir_sources ${CMAKE_CURRENT_SOURCE_DIR}/${list})  
+ENDFOREACH(list)  
+#删除.h文件
+list(REMOVE_ITEM dir_sources ${CMAKE_CURRENT_SOURCE_DIR}/include/rcutils/logging_macros.h)
+# 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${dir_sources}  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-shell"># 屏蔽ament相关包，为生成 logging_macros.h 调用了python
+
+set(CMAKE_COMMAND /usr/bin/cmake)
+set(PYTHON_EXECUTABLE /usr/bin/python3)
+
+
+
+</code></pre>
+<h3 id="4-rcl_logging_interface"><a class="header" href="#4-rcl_logging_interface">4. <em>rcl_logging_interface</em></a></h3>
+<pre><code class="language-shell"># 路径：firmware/ros2/rcl_logging/rcl_logging_interface
+# 依赖 :rcutils
+# 编译宏: 无
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake"># 屏蔽ament相关包，添加依赖rcutils的头文件路径
+target_include_directories(${PROJECT_NAME} PUBLIC
+  &quot;$&lt;BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include&gt;&quot;
+  &quot;$&lt;BUILD_INTERFACE:${CMAKE_PREFIX_PATH}/include/&gt;&quot;
+  &quot;$&lt;INSTALL_INTERFACE:include&gt;&quot;)
+  
+  # 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/src/logging_dir.c  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)  
+  
+</code></pre>
+<h3 id="5-rcl_logging_noop"><a class="header" href="#5-rcl_logging_noop">5. rcl_logging_noop</a></h3>
+<pre><code class="language-shell"># 路径：firmware/ros2/rcl_logging/rcl_logging_noop
+# 依赖 :rcutils rcl_logging_interface
+# 编译宏: 无
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake"># 屏蔽ament相关包，添加依赖rcutils rcl_logging_interface 头文件 静态库
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+  ${CMAKE_PREFIX_PATH}/lib/librcutils.a)
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  ${CMAKE_PREFIX_PATH}/lib/librcl_logging_interface.a)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+  &quot;$&lt;BUILD_INTERFACE:${CMAKE_PREFIX_PATH}/include/&gt;&quot;
+  &quot;$&lt;INSTALL_INTERFACE:include&gt;&quot;)
+ 
+# 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/src/rcl_logging_noop/rcl_logging_noop.cpp  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)  
+</code></pre>
+<h3 id="6-rosidl_typesupport_interface"><a class="header" href="#6-rosidl_typesupport_interface">6. rosidl_typesupport_interface</a></h3>
+<pre><code class="language-shell"># 路径：firmware/ros2/rosidl/rosidl_typesupport_interface
+# 依赖 :无
+# 编译宏: 无
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake"># 屏蔽ament相关包
+# 该cmake仅仅把 macros.h 复制到install/include/rosidl_typesupport_interface目录下
+</code></pre>
+<h3 id="7-rosidl_runtime_c"><a class="header" href="#7-rosidl_runtime_c">7. rosidl_runtime_c</a></h3>
+<pre><code class="language-shell"># 路径：/firmware/ros2/rosidl/rosidl_runtime_c
+# 依赖 :rcutils rosidl_typesupport_interface
+# 编译宏: 无
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake"># 屏蔽ament相关包 添加依赖包的头文件 导出源文件
+
+set(rosidl_runtime_c_sources
+  &quot;src/message_type_support.c&quot;
+  &quot;src/primitives_sequence_functions.c&quot;
+  &quot;src/sequence_bound.c&quot;
+  &quot;src/service_type_support.c&quot;
+  &quot;src/string_functions.c&quot;
+  &quot;src/u16string_functions.c&quot;
+)
+
+add_library(${PROJECT_NAME} ${rosidl_runtime_c_sources})
+target_include_directories(${PROJECT_NAME} PUBLIC
+  &quot;$&lt;BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include&gt;&quot;
+  &quot;$&lt;BUILD_INTERFACE:${CMAKE_PREFIX_PATH}/include/&gt;&quot;
+  &quot;$&lt;INSTALL_INTERFACE:include&gt;&quot;)
+
+
+set(dir_sources)
+# 遍历c 文件 &amp; 把c文件的路径改为绝对路径
+FOREACH(list ${rosidl_runtime_c_sources}) 
+  list(APPEND dir_sources ${CMAKE_CURRENT_SOURCE_DIR}/${list})  
+ENDFOREACH(list)  
+# 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${dir_sources}  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)
+</code></pre>
+<h3 id="8-rmw"><a class="header" href="#8-rmw">8. rmw</a></h3>
+<pre><code class="language-shell"># 路径：/firmware/ros2/rmw/rmw
+# 依赖 :rcutils rosidl_runtime_c
+# 编译宏: 无
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake"># 屏蔽ament相关包 添加依赖包的头文件 导出源文件
+target_include_directories(${PROJECT_NAME} PUBLIC
+  &quot;$&lt;BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include&gt;&quot;
+  &quot;$&lt;BUILD_INTERFACE:${CMAKE_PREFIX_PATH}/include/&gt;&quot;
+  &quot;$&lt;INSTALL_INTERFACE:include&gt;&quot;)
+  
+  set(DIR_rmw_sources)
+# 遍历c 文件 &amp; 把c文件的路径改为绝对路径
+FOREACH(list ${rmw_sources}) 
+  list(APPEND DIR_rmw_sources ${CMAKE_CURRENT_SOURCE_DIR}/${list})  
+ENDFOREACH(list)  
+# 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${DIR_rmw_sources}  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)
+</code></pre>
+<h3 id="9-rosidl_typesupport_microxrcedds_c"><a class="header" href="#9-rosidl_typesupport_microxrcedds_c">9. <em>rosidl_typesupport_microxrcedds_c</em></a></h3>
+<pre><code class="language-shell"># 路径：/firmware/uros/rosidl_typesupport_microxrcedds/rosidl_typesupport_microxrcedds_c
+# 依赖 :rosidl_runtime_c rosidl_typesupport_interface microcdr
+# 编译宏: 无
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake">target_include_directories(${PROJECT_NAME}
+  PUBLIC
+    $&lt;BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include&gt;
+    $&lt;BUILD_INTERFACE:${CMAKE_PREFIX_PATH}/include/&gt;
+    $&lt;INSTALL_INTERFACE:include&gt;
+  )
+ 
+ target_link_libraries(${PROJECT_NAME} PUBLIC
+  ${CMAKE_PREFIX_PATH}/lib/librosidl_runtime_c.a)
+ 
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/src/identifier.c  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)  
+</code></pre>
+<h3 id="10-rmw_microxrcedds_c"><a class="header" href="#10-rmw_microxrcedds_c">10. <em>rmw_microxrcedds_c</em></a></h3>
+<pre><code class="language-shell"># 路径：/firmware/uros/rmw_microxrcedds/rmw_microxrcedds_c
+# 依赖 :
+External_param=&quot;-DRMW_UXRCE_MAX_NODES=1 -DRMW_UXRCE_MAX_PUBLISHERS=10 -DRMW_UXRCE_MAX_SUBSCRIPTIONS=5 \
+                 -DRMW_UXRCE_MAX_SERVICES=1 -DRMW_UXRCE_MAX_CLIENTS=1 -DRMW_UXRCE_MAX_HISTORY=4 -DRMW_UXRCE_TRANSPORT=custom&quot;
+
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake">  set(dir_sources)
+# 遍历c 文件 &amp; 把c文件的路径改为绝对路径
+FOREACH(list ${SRCS}) 
+    if(list MATCHES &quot;OFF&quot;)
+        message(STATUS &quot;=============${list}&quot;)
+    else()
+        list(APPEND dir_sources ${CMAKE_CURRENT_SOURCE_DIR}/${list})
+    endif()
+ENDFOREACH(list)  
+# 添加自定义命令，复制源文件
+add_custom_command(TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND mkdir ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  COMMAND cp ${dir_sources}  ${CMAKE_PREFIX_PATH}/src/${PROJECT_NAME}
+  VERBATIM
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  ${CMAKE_PREFIX_PATH}/lib/libmicrocdr.a
+  ${CMAKE_PREFIX_PATH}/lib/libmicroxrcedds_client.a
+)
+
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+    $&lt;BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include&gt;
+    $&lt;BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include&gt;
+    $&lt;BUILD_INTERFACE:${CMAKE_PREFIX_PATH}/include/&gt;
+  PRIVATE
+  $&lt;BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src&gt;
+)
+</code></pre>
+<h2 id="11rosidl_typesupport_introspection_c"><a class="header" href="#11rosidl_typesupport_introspection_c">11.<em>rosidl_typesupport_introspection_c</em></a></h2>
+<pre><code class="language-shell"># 路径：/firmware/ros2/rosidl/rosidl_typesupport_introspection_c
+# 无依赖
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake"># 屏蔽ament相关包
+</code></pre>
+<h2 id="12-rosidl_generator_c"><a class="header" href="#12-rosidl_generator_c">12. rosidl_generator_c</a></h2>
+<pre><code class="language-shell"># 路径：/firmware/ros2/rosidl/rosidl_typesupport_introspection_c
+</code></pre>
+<p>CmakeList.txt文件修改</p>
+<pre><code class="language-cmake"># 只复制了一个python文件
+</code></pre>
+<h3 id="13-rosidl_default_generators"><a class="header" href="#13-rosidl_default_generators">13 rosidl_default_generators</a></h3>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week8"><a class="header" href="#week8">week8</a></h1>
+<blockquote>
+<p>2022/08/22 - 2022/08/28</p>
+</blockquote>
+<h2 id="上周任务-3"><a class="header" href="#上周任务-3">上周任务：</a></h2>
+<ul>
+<li>理清msg类型转换为c的流程；</li>
+</ul>
+<h2 id="完成情况-3"><a class="header" href="#完成情况-3">完成情况</a></h2>
+<ul>
+<li>没有理清msg转化为c的流程，但是可以找到转化层c的源码；</li>
+<li>结合msg源码、rclc、rcl、rmw基于cmake构建microROS静态库。因此，基于固定的microROS版本，可以实现基于scons构建；</li>
+</ul>
+<blockquote>
+<p>注：基于cmake构建出来的静态文件只支持std_msgs包含的数据类型，另外只使用<code>microros_pub_int32</code>在单片机上测试，所以构建出来的静态文件只能说明<code>rclc、rcl、rmw</code>包含完整，不能实现完整的ros2功能(其他的msg类型、srv、action)</p>
+</blockquote>
+<ul>
+<li>大致分离出<code>rclc、rcl、rmw</code>，第二问可以算初步完成，详见<a href="week_8.html#%E5%9F%BA%E4%BA%8Ecmake%E6%9E%84%E5%BB%BAmicroros(%E8%A3%81%E5%89%AA%E7%89%88)">基于cmake构建microros(裁剪版)</a></li>
+</ul>
+<h2 id="周会拟讨论问题"><a class="header" href="#周会拟讨论问题">周会拟讨论问题</a></h2>
+<ol>
+<li>
+<p>目前有希望直接通过scons构建microROS：</p>
+<p>优点：</p>
+<ul>
+<li>microROS包和rtt中的其他软件包使用流程一致；</li>
+<li>使用源码构建，可以解决目前为每款单片机的创造一个静态文件的问题；</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>源代码无法和官方保持同步；</li>
+</ul>
+</li>
+<li>
+<p>关于第三问的处理方式；</p>
+</li>
+</ol>
+<h2 id="日志"><a class="header" href="#日志">日志</a></h2>
+<h3 id="std_msgs"><a class="header" href="#std_msgs">std_msgs</a></h3>
+<h4 id="源码-1"><a class="header" href="#源码-1">源码</a></h4>
+<p>解析std_msg package需要以下四个package:</p>
+<ul>
+<li><code>rosidl_generator_c</code>： 提供ROS接口 ;</li>
+<li><code>rosidl_typesupport_introspection_c</code>: 提供消息类型支持;</li>
+<li><code>rosidl_default_generators</code></li>
+<li><code>rosidl_typesupport_microxrcedds_c</code>为Micro XRCE-DDS提供接口;</li>
+</ul>
+<p><strong>最终生成的 c 可以在<code>build/std_msg</code>下面找到源码</strong>（使用microROS提供的命令编译的目录下）</p>
+<p>源码文件结构：</p>
+<pre><code class="language-bash">haijun@haijun-Lenovo:~/micro_ROS/cmake_microros/std_msgs$ tree -L 3
+.
+├── std_msgs_rosidl_generator_c
+│   ├── CMakeLists.txt
+│   └── std_msgs
+│       └── msg
+├── std_msgs_rosidl_typesupport_c
+│   ├── CMakeLists.txt
+│   └── std_msgs
+│       └── msg
+├── std_msgs_rosidl_typesupport_introspection_c
+│   ├── CMakeLists.txt
+│   └── std_msgs
+│       └── msg
+└── std_msgs_rosidl_typesupport_microxrcedds_c
+    ├── CMakeLists.txt
+    └── std_msgs
+        └── msg
+</code></pre>
+<h4 id="编译"><a class="header" href="#编译">编译</a></h4>
+<ul>
+<li>对应文件单独编译成静态文件</li>
+</ul>
+<pre><code class="language-cmake">
+file(GLOB_RECURSE SRC_DIR_LIST ${PROJECT_SOURCE_DIR}/std_msgs/msg/detail/*.c)
+add_library(${PROJECT_NAME}  ${SRC_DIR_LIST})
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${PROJECT_SOURCE_DIR}
+    ${PARA_INCLUDE_PATH}
+  )
+  install(
+    TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+  )
+</code></pre>
+<blockquote>
+<p>注意：<code>std_msgs_rosidl_typesupport_c</code>需要添加一个宏定义<code>add_definitions(-DROSIDL_TYPESUPPORT_STATIC_TYPESUPPORT)</code>表示使用静态类型</p>
+</blockquote>
+<h3 id="基于cmake构建microros裁剪版"><a class="header" href="#基于cmake构建microros裁剪版">基于cmake构建microros(裁剪版)</a></h3>
+<p>使用的文件：</p>
+<p><strong>rmw</strong></p>
+<ul>
+<li>Micro-CDR：实施CDR标准序列化方法的C库  位置: <code>/firmware/eProsima/Micro-CDR</code></li>
+<li>Micro-XRCE-DDS-Client：DDS客户端   位置：<code>/firmware/eProsima/Micro-XRCE-DDS-Client</code></li>
+<li>rmw：中间件，为不同的DDS实现提供了一个抽象层  位置：<code>/firmware/ros2/rmw/rmw</code></li>
+<li>rmw_microxrcedds_c： 为XRCE-DDS（RMW层）提供了中间件实现 位置<code>/firmware/uros/rmw_microxrcedds/rmw_microxrcedds_c</code></li>
+</ul>
+<p><strong>数据类型转化（idl）：</strong></p>
+<ul>
+<li>rosidl_runtime_c:提供定义，初始化和最终化功能以及用于获取和使用rosidl typesupport类型的宏  位置：<code>/firmware/ros2/rosidl/rosidl_runtime_c</code></li>
+<li>rosidl_typesupport_microxrcedds_c： 为microxrcedds提供能支持idl的接口  位置:<code>/firmware/uros/rosidl_typesupport_microxrcedds/rosidl_typesupport_microxrcedds_c</code></li>
+<li>rosidl_typesupport_c：为idl提供c 语言的接口   位置：<code>/firmware/uros/rosidl_typesupport/rosidl_typesupport_c</code></li>
+</ul>
+<p><strong>rcl</strong></p>
+<ul>
+<li>rcutils: 为ROS2提供数据结构（C API）位置:<code>firmware/uros/rcutils</code></li>
+<li>rcl_logging_interface ：提供日志函数  位置<code>/firmware/ros2/rcl_logging/rcl_logging_interface</code></li>
+<li>rcl_logging_noop: 提供日志函数    位置：<code>/firmware/ros2/rcl_logging/rcl_logging_noop</code></li>
+<li>tracetools:追踪工具   位置：<code>/firmware/uros/tracetools/tracetools</code></li>
+<li>rcl： ros客户端库  位置：<code>/firmware/uros/rcl/rcl</code></li>
+</ul>
+<p><strong>rclc</strong></p>
+<ul>
+<li>rclc：ros客户端c库  位置<code>/firmware/uros/rclc/rclc</code></li>
+</ul>
+<p><strong>std_msg</strong></p>
+<ul>
+<li>std_msgs_rosidl_generator_c</li>
+<li>std_msgs_rosidl_typesupport_c</li>
+<li>std_msgs_rosidl_typesupport_introspection_c</li>
+<li>std_msgs_rosidl_typesupport_microxrcedds_c</li>
+</ul>
+<p>根据以上文件生成的静态文件:</p>
+<pre><code class="language-bash">.
+├── libmicrocdr.a
+├── libmicroxrcedds_client.a
+├── librcl.a
+├── librclc.a
+├── librcl_logging_interface.a
+├── librcl_logging_noop.a
+├── librcutils.a
+├── librmw.a
+├── librmw_microxrcedds.a
+├── librosidl_runtime_c.a
+├── librosidl_typesupport_c.a
+├── librosidl_typesupport_microxrcedds_c.a
+├── libstd_msgs_rosidl_generator_c.a
+├── libstd_msgs__rosidl_typesupport_c.a
+├── libstd_msgs_rosidl_typesupport_introspection_c.a
+├── libstd_msgs_rosidl_typesupport_microxrcedds_c.a
+├── libtracetools.a
+
+</code></pre>
+<p>合并成一个静态文件：</p>
+<pre><code class="language-bash"># 合并静态文件
+cd ${Dir_Install}/lib
+
+for file in $(find -name '*.a'); do
+    echo ${file}
+    folder=$(echo $file | sed -E &quot;s/(.+)\/(.+).a/\2/&quot;); 
+    mkdir -p $folder; 
+    cd $folder; 
+    ar x ../$file;
+    for f in *; do 
+			mv $f ../$folder-$f; 
+		done; 
+    cd ../
+    rm -rf $folder
+done
+ar rc libmicroros.a *.obj
+rm *.obj
+
+mv libmicroros.a ${Base_File}
+echo &quot;mv libmicroros.a to ${Base_File}&quot;
+</code></pre>
+<p>最终生成的静态文件：</p>
+<pre><code class="language-bash">1.2M	libmicroros.a
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week9"><a class="header" href="#week9">week9</a></h1>
+<blockquote>
+<p>2022/08/29 - 2022/09/04</p>
+</blockquote>
+<h2 id="上周任务-4"><a class="header" href="#上周任务-4">上周任务</a></h2>
+<ol>
+<li>在<code>micro_ros_setup</code>中添加rtthread的构建脚本；</li>
+</ol>
+<h2 id="完成情况-4"><a class="header" href="#完成情况-4">完成情况</a></h2>
+<ul>
+<li>初步完成：通过<code>micro_ros_setup</code>完成代码下载、编译（microROS &amp; rtthread）</li>
+</ul>
+<p>代码：</p>
+<p>micro_ros_setup ，新增config/rtthread</p>
+<pre><code class="language-bash">git clone -b rtthread https://github.com/navy-to-haijun/micro_ros_setup.git
+</code></pre>
+<p>micro_ros_rtthread： 提供demos&amp;transport</p>
+<pre><code class="language-bash">git clone https://github.com/navy-to-haijun/micro_ros_rtthread.git
+</code></pre>
+<h2 id="周会拟讨论问题-1"><a class="header" href="#周会拟讨论问题-1">周会拟讨论问题</a></h2>
+<ul>
+<li>当前构建方式(先用clocon编译microROS为静态文件，在使用scons链接静态文件和rtthread一起编译出可执行文件)是否合理；</li>
+<li>当前方案的优化指出；</li>
+<li>为了工程完整必会提供一个demo和transport的文档，这个文档如何处理</li>
+</ul>
+<h2 id="日志-1"><a class="header" href="#日志-1">日志</a></h2>
+<p>micro_ros_setup：为不同的嵌入式平台提供代码下载、编译、运行的脚本；</p>
+<ol>
+<li>micro_ros_setup/config`文件夹下添加rtthread脚本：</li>
+</ol>
+<pre><code class="language-bash">tree
+.
+├── dev_ros2_packages.txt			# 官方提供：ament相关包的索引
+├── dev_uros_packages.repos			# 官方提供：
+├── generic
+│   ├── build.sh					# 提供编译脚本（microROS &amp; rtthread）
+│   ├── client-colcon.meta			# 官方提供：基本宏定义 --&gt; microROS 
+│   ├── client_uros_packages.repos  # 官方提供:microros相关包
+│   ├── configure.sh				# 提供配置脚本：配置demo，使用的通信方式
+│   ├── create.sh					# 提供代码的下载：rtthread demos transport
+│   └── supported_platforms			# 手动写入支出的板卡
+└── list_apps.sh					# 列出所有的demo(辅助脚本)
+
+1 directory, 9 files
+</code></pre>
+<ol start="2">
+<li>自己提供一个文件夹用于存放demos&amp;transport文件</li>
+</ol>
+<p>文件名：micro_ros_rtthread（暂时放到自己的仓库下）</p>
+<pre><code class="language-bash">.
+├── custom_toolchain.cmake			# 为microROS提供编译预定义
+├── examples						# example
+│   ├── micro_ros_pub_int32.c
+│   └── micro_ros_sub_int32.c
+├── Kconfig							# 方便后期menuconfig配置
+├── microros_extensions				# 提供通信方式
+│   ├── micro_ros_rtt.h
+│   └── rtt_serial_transports.c		# serial
+├── README.md
+├── SConscript						# 编译配置脚本
+└── stm32h7xx_hal_msp.c				# 底层驱动配置文件(提供uart1)
+</code></pre>
+<h2 id="执行步骤"><a class="header" href="#执行步骤">执行步骤</a></h2>
+<h3 id="1-编译micro_ros_setup"><a class="header" href="#1-编译micro_ros_setup">1 编译micro_ros_setup</a></h3>
+<p>将<code>config/rtthread</code>编译(复制)到install中</p>
+<pre><code class="language-bash">clocon build
+source install/local_setup.sh
+</code></pre>
+<h3 id="2-下载源码"><a class="header" href="#2-下载源码">2 下载源码</a></h3>
+<p>主要通过<code>create_firmware_ws.sh </code>调用<code>create.sh</code>,实现:</p>
+<ul>
+<li>
+<p>下载microROS的相关代码</p>
+</li>
+<li>
+<p>下载 rtthread  --&gt; <code>firmware/sdk-bsp-stm32h750-realthread-artpi</code></p>
+</li>
+<li>
+<p>下载micro_ros_rtthread  --&gt;<code>firmware/gcc-arm-none-eabi-5_4-2016q3</code></p>
+</li>
+<li>
+<p>下载交叉编译链  --&gt;<code>irmware/sdk-bsp-stm32h750-realthread-artpi/projects/art_pi_wifi/micro_ros_rtthread</code></p>
+</li>
+</ul>
+<pre><code>ros2 run micro_ros_setup create_firmware_ws.sh  rtthread art-pi
+</code></pre>
+<p>create.sh核心代码</p>
+<pre><code class="language-shell"> echo &quot;dowmload code &quot;
+        git clone https://github.com/RT-Thread-Studio/sdk-bsp-stm32h750-realthread-artpi.git
+        git clone https://github.com/navy-to-haijun/micro_ros_rtthread.git
+
+    echo &quot;dowmload  gcc-arm-none-eabi-5_4&quot;
+        wget -c https://armkeil.blob.core.windows.net/developer//sitecore/shell/-/media/Files/downloads/gnu-rm/5_4-2016q3/gcc-arm-none-eabi-5_4-2016q3-20160926-linux,-d-,tar.bz2
+        tar -xvf gcc-arm-none-eabi-5_4-2016q3-20160926-linux,-d-,tar.bz2
+        rm gcc-arm-none-eabi-5_4-2016q3-20160926-linux,-d-,tar.bz2
+    fi
+
+    if [ -e $FW_TARGETDIR/sdk-bsp-stm32h750-realthread-artpi/projects/art_pi_wifi ]; then
+        mv  micro_ros_rtthread/ ./sdk-bsp-stm32h750-realthread-artpi/projects/art_pi_wifi
+        # soft link
+        pushd $FW_TARGETDIR/sdk-bsp-stm32h750-realthread-artpi/projects/art_pi_wifi&gt;/dev/null
+           ln -s ../../libraries/ libraries
+           ln -s ../../rt-thread/ rt-thread 
+        popd &gt;/dev/null
+    fi
+</code></pre>
+<h3 id="3-配置rtthread工程"><a class="header" href="#3-配置rtthread工程">3. 配置rtthread工程</a></h3>
+<p>主要通过<code>configure_firmware.sh </code>调用<code>configure.sh</code>,实现:</p>
+<ul>
+<li>为<em>cconfig.h</em>提供以下宏定义：
+<ul>
+<li>开启UART1 or udp</li>
+<li>选中的demo的相关宏定义</li>
+</ul>
+</li>
+<li>为Kconfig添加一个source 使其能找到<code>micro_ros_rtthread</code></li>
+</ul>
+<pre><code>ros2 run micro_ros_setup configure_firmware.sh micro_ros_pub_int32.c -t serial
+</code></pre>
+<p>configure.sh核心代码</p>
+<pre><code class="language-shell">if [ &quot;$UROS_TRANSPORT&quot; == &quot;serial&quot; ]; then
+		echo &quot;Using serial device.&quot;
+		echo &quot;add macro definition for  cconfig.h.&quot;
+		sed -i '$i #define BSP_USING_UART1 ' 			$RTCONIF
+		sed -i '$i #define USING_MICROROS ' 			$RTCONIF
+		sed -i '$i #define MICROROS_SERIAL ' 			$RTCONIF
+		sed -i '$i #define MICROROS_DEVIVE &quot;uart1&quot; ' 	$RTCONIF
+		echo &quot;add macro: BSP_USING_UART1; USING_MICROROS; MICROROS_SERIAL; MICROROS_DEVIVE &quot;
+		# modify stm32h7xx_hal_msp.c
+		cp micro_ros_rtthread/stm32h7xx_hal_msp.c board/CubeMX_Config/Core/Src/stm32h7xx_hal_msp.c
+fi
+
+if [ &quot;$CONFIG_NAME&quot; == &quot;micro_ros_pub_int32.c&quot; ]; then
+		sed -i '$i #define MICROS_EXAMPLE_PUB_INT32 ' 	$RTCONIF
+		echo &quot;add macro: MICROS_EXAMPLE_PUB_INT32 &quot;
+	elif [ &quot;$CONFIG_NAME&quot; == &quot;micro_ros_sub_int32.c&quot; ]; then
+		sed -i '$i #define MICROS_EXAMPLE_SUB_INT32 ' 	$RTCONIF
+		echo &quot;add macro:define MICROS_EXAMPLE_SUB_INT32 &quot;
+	else
+		help
+	fi
+
+	sed -i '$a source &quot;micro_ros_rtthread/Kconfig&quot; ' 	Kconfig
+	echo 'add source :  source &quot;micro_ros_rtthread/Kconfig&quot; --&gt; Kconfig'
+</code></pre>
+<h3 id="4-编译"><a class="header" href="#4-编译">4. 编译</a></h3>
+<p>通过<code>create_firmware_ws.sh</code>调用<code>create.sh</code></p>
+<p>主要通过<code>configure_firmware.sh </code>调用<code>configure.sh</code>,实现:</p>
+<ul>
+<li>配置交叉编译链 ----&gt; custom_toolchain.cmake &amp; rtconfig.py</li>
+<li>编译microROS：最终会生成一个静态文件</li>
+<li>编译rtthread</li>
+</ul>
+<pre><code>ros2 run micro_ros_setup build_firmware.sh 
+</code></pre>
+<p>​	build.sh核心代码</p>
+<pre><code class="language-shell">colcon build \
+		--merge-install \
+		--packages-ignore-regex=.*_cpp \
+		--metas $COLCON_META \
+		--cmake-args \
+		&quot;--no-warn-unused-cli&quot; \
+		-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF \
+		-DTHIRDPARTY=ON \
+		-DBUILD_SHARED_LIBS=OFF \
+		-DBUILD_TESTING=OFF \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN \
+		-DCMAKE_VERBOSE_MAKEFILE=ON; \
+
+pushd $RTTHREAD_DIR &gt;/dev/null
+
+	scons --target=vsc
+	scons
+
+popd &gt;/dev/null
+</code></pre>
+<h3 id="5-下载"><a class="header" href="#5-下载">5. 下载</a></h3>
+<p>由于art-pi下载需要调用外部算法，不知道如何写成命令，所有这一步的脚本没有写</p>
+<h2 id="问题"><a class="header" href="#问题">问题</a></h2>
+<p>micro_ros_rtthread/build/include/rmw/types.h 在编译时会报错误, 错误定位：</p>
+<pre><code class="language-c">#ifndef _WIN32
+# define RMW_DECLARE_DEPRECATED(name, msg) name __attribute__((deprecated(msg)))
+#else
+# define RMW_DECLARE_DEPRECATED(name, msg) name __pragma(deprecated(name))
+#endif
+</code></pre>
+<p>为什么_WIN32宏定义被启用， 于是编译之前，修改：</p>
+<pre><code class="language-c">#ifndef _WIN32
+# define RMW_DECLARE_DEPRECATED(name, msg) name
+#else
+# define RMW_DECLARE_DEPRECATED(name, msg) name __pragma(deprecated(name))
+#endif
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week10"><a class="header" href="#week10">week10</a></h1>
+<blockquote>
+<p>2022/09/05 - 2022/09/10</p>
+</blockquote>
+<h2 id="上周任务-5"><a class="header" href="#上周任务-5">上周任务</a></h2>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+完成下载脚本编写；</li>
+<li><input disabled="" type="checkbox" checked=""/>
+将外接串口换成USB虚拟串口；</li>
+<li><input disabled="" type="checkbox" checked=""/>
+增加demo；</li>
+<li><input disabled="" type="checkbox"/>
+尝试修复UDP bug；</li>
+</ul>
+<h2 id="完成情况-5"><a class="header" href="#完成情况-5">完成情况</a></h2>
+<h3 id="下载脚本编写"><a class="header" href="#下载脚本编写">下载脚本编写：</a></h3>
+<p><strong>完成，无问题</strong></p>
+<p><code>micro_ros_setup/config/rtthread/generic</code>文件中增加<code>flash.sh</code> 调用 <code>STM32CubeProgrammer</code> 完成下载：</p>
+<p>核心代码：</p>
+<pre><code class="language-bash">RTTHREAD_DIR=$FW_TARGETDIR/sdk-bsp-stm32h750-realthread-artpi/projects/art_pi_wifi
+STLDR_DIR=$FW_TARGETDIR/sdk-bsp-stm32h750-realthread-artpi/debug/stldr/ART-Pi_W25Q64.stldr
+
+STM32_Programmer_CLI -c port=swd -w &quot;$RTTHREAD_DIR/rtthread.bin&quot; 0x90000000 -v -el  $STLDR_DIR
+</code></pre>
+<h3 id="将外接串口换成usb虚拟串口"><a class="header" href="#将外接串口换成usb虚拟串口">将外接串口换成USB虚拟串口</a></h3>
+<p><strong>完成，无问题</strong></p>
+<p>增加一个<code>rtconfig.h</code>文件，用于提前配置USB 虚拟串口；</p>
+<h3 id="增加demo"><a class="header" href="#增加demo">增加demo</a></h3>
+<table><thead><tr><th>demo</th><th>备注</th></tr></thead><tbody>
+<tr><td>micro_ros_pub_int32.c</td><td>uart可用、udp4 可用</td></tr>
+<tr><td>micro_ros_sub_int32.c</td><td>uart可用、udp4 不可用</td></tr>
+<tr><td>micro_ros_pub_sub_int32.c</td><td>uart可用、udp4 不可用</td></tr>
+<tr><td>micro_ros_ping_pong.c</td><td>uart可用、udp4 不可用</td></tr>
+<tr><td>micro_ros_addtwoints_server.c</td><td>service 客户端：似乎没有进入回调</td></tr>
+<tr><td>micro_ros_addtwoints_client.c</td><td>service 客户端：回调接收的数据和实际不符合</td></tr>
+</tbody></table>
+<h3 id="udp"><a class="header" href="#udp">UDP</a></h3>
+<p>参考：</p>
+<pre><code> Micro-XRCE-DDS-Client/src/c/profile/transport/ip/udp/udp_transport_posix_nopoll.c 
+</code></pre>
+<p>对读写进行改写，publisher 没有问题， subscriber能正常建立，但是似乎进不去回调。</p>
+<p>问题已经在micro_ros_setup 提出  <a href="https://github.com/micro-ROS/micro_ros_setup/issues/576">link</a></p>
+<h2 id="周会拟讨论问题-2"><a class="header" href="#周会拟讨论问题-2">周会拟讨论问题</a></h2>
+<ol>
+<li>是否可以提交pr；</li>
+<li>解决service demos 的问题；</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week11"><a class="header" href="#week11">week11</a></h1>
+<blockquote>
+<p>2022/09/13 - 2022/09/18</p>
+</blockquote>
+<h2 id="上周任务-6"><a class="header" href="#上周任务-6">上周任务</a></h2>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+完善第二问：借助<code>scons --target=cmake</code>, 实现将microROS嵌入rtthread，cmake负责编译microROS静态库，后续可以选择可以使用cmake或者scons编译整个工程；</li>
+<li><input disabled="" type="checkbox" checked=""/>
+向 wuhanstudio/micro_ros 提交pr 完成第一二问；</li>
+<li><input disabled="" type="checkbox" checked=""/>
+UDP bug 反馈；</li>
+</ul>
+<h2 id="周会拟讨论问题-3"><a class="header" href="#周会拟讨论问题-3">周会拟讨论问题</a></h2>
+<ul>
+<li>PR</li>
+<li>UDP 的bug</li>
+</ul>
+<h2 id="microros嵌入rtthread"><a class="header" href="#microros嵌入rtthread">microROS嵌入rtthread</a></h2>
+<p>shell 脚本 + cmake的方式</p>
+<p>CMakeLists.txt</p>
+<pre><code class="language-cmake"># build micro-ROS : make build_microros_lib
+add_custom_target(build_microros_lib
+	WORKING_DIRECTORY &quot;${CMAKE_CURRENT_SOURCE_DIR}/micro-ROS-rtthread-app&quot;
+	COMMAND sh generate_microros_library.sh ${CMAKE_C_COMPILER} ${CMAKE_CXX_COMPILER} ${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS}
+	COMMENT &quot;build micro-ROS...&quot;
+)
+
+# head files
+INCLUDE_DIRECTORIES(micro-ROS-rtthread-app/microros/build/include)
+INCLUDE_DIRECTORIES(micro-ROS-rtthread-app/transports)
+
+#  teansport: serial
+add_definitions(-DMICROROS_SERIAL)
+add_definitions(-DMICROROS_DEVIVE=&quot;vcom&quot;)
+list(APPEND PROJECT_SOURCES micro-ROS-rtthread-app/transports/rtt_serial_transports.c)
+
+# example 
+# pub_int32
+add_definitions(-DMICROS_EXAMPLE_PUB_INT32)
+list(APPEND PROJECT_SOURCES micro-ROS-rtthread-app/examples/micro_ros_pub_int32.c)
+
+link_directories(${CMAKE_SOURCE_DIR}/micro-ROS-rtthread-app/microros/build)
+LINK_LIBRARIES(microros)
+
+</code></pre>
+<p>shell 脚本</p>
+<ul>
+<li>下载ament相关包</li>
+<li>编译ament相关包</li>
+<li>从<code>CMakeLists.txt</code> 获取交叉编译链 相关宏定义，为编译microROS提供编译支持</li>
+<li>下载microROS相关包</li>
+<li>编译microROS相关包</li>
+<li>合并成静态库，打包头文件；</li>
+</ul>
+<h2 id="提交pr"><a class="header" href="#提交pr">提交PR</a></h2>
+<ul>
+<li>改正UDP bug（第一小问）</li>
+<li>增加两个example: micro_ros_pub_sub_int32.c; micro_ros_ping_pong.c</li>
+<li>build static library for microROS by cmake：摆脱为每种内核保留一个静态库。（第二问）</li>
+</ul>
+<h2 id="udp-bug-反馈"><a class="header" href="#udp-bug-反馈">UDP bug 反馈</a></h2>
+<p>代码应该没有什么问题，估计是rmw 问题，通过修改 ROS 2<code>RMW_IMPLEMENTATION</code>环境变量改善。刚开始有效果，但是目前没有效果了。</p>
+<pre><code>export RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export RMW_IMPLEMENTATION= rmw_cyclonedds_cpp
+</code></pre>
+<p>​	</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="week12"><a class="header" href="#week12">week12</a></h1>
+<blockquote>
+<p>2022/09/19 - 2022/09/26</p>
+</blockquote>
+<h2 id="上周任务-7"><a class="header" href="#上周任务-7">上周任务</a></h2>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+完成需要在2022开源之夏中提交的文档；</li>
+<li><input disabled="" type="checkbox" checked=""/>
+提交PR；</li>
+<li><input disabled="" type="checkbox"/>
+继续修复UDP subscriber &amp; service的问题；</li>
+</ul>
+<p>周会拟讨论的问题</p>
+<ul>
+<li>UDP subscriber</li>
+<li>结尾事项；</li>
+</ul>
+<h2 id="日志-2"><a class="header" href="#日志-2">日志</a></h2>
+<h3 id="pr"><a class="header" href="#pr">PR</a></h3>
+<p>PR地址: https://github.com/micro-ROS/micro_ros_setup/pull/581 ， 目前没有回应</p>
+<h3 id="bug"><a class="header" href="#bug">bug</a></h3>
+<p>对于service的问题可以确定是<code>rmw </code> 需要使用<code>rmw_fastrtps</code></p>
+<pre><code>export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+</code></pre>
+<p>对于UDP subscriber， 我使用<code>sub_twist</code>的问题和<code>sub_int32</code>的问题一样：没有回调</p>
+<p>测试环境: docker</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>
